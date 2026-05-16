@@ -1,4 +1,4 @@
-import mark from "@/assets/swamn-logo.jpg";
+import mark from "@/assets/swamn-logo-clean.png";
 
 interface LogoProps {
   size?: number;
@@ -12,7 +12,7 @@ export const Logo = ({ size = 32, variant = "default", withWordmark = true, clas
     <div className={`flex items-center gap-2.5 ${className}`}>
       <div
         className="shrink-0 overflow-visible"
-        style={{ width: size, height: size, padding: size * 0.02 }}
+        style={{ width: size, height: size }}
       >
         <img
           src={mark}
