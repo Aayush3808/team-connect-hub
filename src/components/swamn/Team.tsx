@@ -43,11 +43,19 @@ const team = [
   },
   {
     name: "Satvik",
-    role: "Pitch & Storytelling",
+    role: "Pitch Handler",
     sub: "Narrative & Presentation",
-    desc: "Crafts SWAMN's pitch and presentation materials — translating engineering and impact into compelling stories for judges, partners, and the public.",
+    desc: "Owns SWAMN's pitch end-to-end — shapes the narrative, builds the deck, and delivers it. Translates complex engineering and real-world impact into a clear, persuasive story that resonates with judges, partners, and investors.",
     initials: "SK",
     email: "satvik@swamn.com",
+  },
+  {
+    name: "Annapurna",
+    role: "Human Resources",
+    sub: "People & Culture",
+    desc: "Leads people operations at SWAMN — onboarding, team coordination, and culture. Keeps the team aligned, motivated, and moving in sync, ensuring every member has the clarity and support they need to do their best work.",
+    initials: "AN",
+    email: "annapurna@swamn.com",
   },
 ];
 
