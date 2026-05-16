@@ -1,0 +1,182 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* SWAMN Design System — premium, calm, ocean-inspired.
+   All colors HSL. No ad-hoc colors in components. */
+
+@layer base {
+  :root {
+    /* Surfaces */
+    --background: 210 40% 99%;
+    --foreground: 215 45% 12%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 215 45% 12%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 45% 12%;
+
+    /* Brand — deep navy */
+    --primary: 215 60% 14%;
+    --primary-foreground: 200 40% 98%;
+
+    /* Brand — sky / aqua */
+    --accent: 198 90% 56%;
+    --accent-foreground: 215 60% 14%;
+
+    --secondary: 205 50% 96%;
+    --secondary-foreground: 215 60% 14%;
+
+    --muted: 210 30% 96%;
+    --muted-foreground: 215 18% 42%;
+
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 210 25% 90%;
+    --input: 210 25% 90%;
+    --ring: 198 90% 56%;
+
+    --radius: 1rem;
+
+    /* Brand color tokens */
+    --navy: 215 60% 14%;
+    --navy-deep: 215 70% 9%;
+    --sky: 200 95% 62%;
+    --aqua: 188 85% 55%;
+    --teal: 178 60% 45%;
+    --mist: 205 60% 97%;
+
+    /* Gradients */
+    --gradient-hero: radial-gradient(60% 80% at 50% 0%, hsl(198 90% 92%) 0%, hsl(205 80% 97%) 45%, hsl(0 0% 100%) 80%);
+    --gradient-aqua: linear-gradient(135deg, hsl(var(--sky)) 0%, hsl(var(--aqua)) 50%, hsl(var(--teal)) 100%);
+    --gradient-navy: linear-gradient(160deg, hsl(var(--navy)) 0%, hsl(var(--navy-deep)) 100%);
+    --gradient-text: linear-gradient(120deg, hsl(var(--navy)) 0%, hsl(198 80% 38%) 60%, hsl(var(--aqua)) 100%);
+    --gradient-soft: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(205 60% 98%) 100%);
+
+    /* Shadows */
+    --shadow-soft: 0 1px 2px hsl(215 40% 20% / 0.04), 0 8px 24px -8px hsl(215 40% 20% / 0.08);
+    --shadow-glow: 0 20px 60px -20px hsl(198 90% 56% / 0.35);
+    --shadow-card: 0 1px 0 hsl(215 30% 90% / 0.6), 0 30px 60px -30px hsl(215 50% 20% / 0.18);
+
+    /* Motion */
+    --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, 'SF Pro Display', sans-serif;
+    font-feature-settings: 'cv11', 'ss01', 'ss03';
+  }
+  ::selection {
+    background: hsl(var(--aqua) / 0.25);
+    color: hsl(var(--navy-deep));
+  }
+}
+
+@layer components {
+  .container-px {
+    @apply px-6 md:px-10 lg:px-16;
+  }
+  .h-display {
+    font-family: 'Inter', sans-serif;
+    @apply font-semibold tracking-[-0.035em] leading-[1.02];
+  }
+  .h-serif {
+    font-family: 'Instrument Serif', serif;
+    @apply font-normal tracking-[-0.01em];
+    font-style: italic;
+  }
+  .text-gradient {
+    background: var(--gradient-text);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    /* Prevent italic/serif glyph clipping on the trailing letter */
+    display: inline-block;
+    padding-right: 0.12em;
+    padding-bottom: 0.08em;
+    margin-right: -0.06em;
+  }
+  .glass {
+    background: hsl(0 0% 100% / 0.65);
+    backdrop-filter: saturate(180%) blur(18px);
+    -webkit-backdrop-filter: saturate(180%) blur(18px);
+    border: 1px solid hsl(0 0% 100% / 0.7);
+  }
+  .card-premium {
+    @apply rounded-2xl bg-card border border-border/70;
+    box-shadow: var(--shadow-card);
+  }
+  .hairline {
+    background: linear-gradient(90deg, transparent, hsl(var(--border)), transparent);
+    height: 1px;
+  }
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 1s var(--ease-out-soft), transform 1s var(--ease-out-soft);
+    will-change: opacity, transform;
+  }
+  .reveal.in {
+    opacity: 1;
+    transform: none;
+  }
+  .marquee-fade {
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+            mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  }
+}
+
+@layer utilities {
+  .bg-hero { background: var(--gradient-hero); }
+  .bg-aqua { background: var(--gradient-aqua); }
+  .bg-navy { background: var(--gradient-navy); }
+  .bg-soft { background: var(--gradient-soft); }
+  .shadow-soft { box-shadow: var(--shadow-soft); }
+  .shadow-glow { box-shadow: var(--shadow-glow); }
+}
+
+/* Animated hero gradient orbs — calm, slow, premium */
+@keyframes float-slow {
+  0%, 100% { transform: translate3d(0,0,0) scale(1); }
+  50%      { transform: translate3d(0,-24px,0) scale(1.04); }
+}
+@keyframes drift {
+  0%   { transform: translate3d(-2%, 0, 0); }
+  50%  { transform: translate3d(2%, -1%, 0); }
+  100% { transform: translate3d(-2%, 0, 0); }
+}
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 hsl(var(--aqua) / 0.45); }
+  100% { box-shadow: 0 0 0 24px hsl(var(--aqua) / 0); }
+}
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.animate-float-slow { animation: float-slow 9s ease-in-out infinite; }
+.animate-drift      { animation: drift 18s ease-in-out infinite; }
+.animate-pulse-ring { animation: pulse-ring 2.4s ease-out infinite; }
+.animate-fade-up    { animation: fade-up 0.9s var(--ease-out-soft) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-float-slow, .animate-drift, .animate-pulse-ring, .animate-fade-up { animation: none !important; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+}
