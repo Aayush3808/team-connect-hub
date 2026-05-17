@@ -88,13 +88,15 @@ export const Team = () => (
             </div>
             <div className="p-7">
               <p className="text-sm leading-relaxed text-muted-foreground">{m.desc}</p>
-              <a
-                href={`mailto:${m.email}`}
-                className="mt-5 inline-flex items-center gap-1.5 text-xs font-medium tracking-wide text-navy transition-colors hover:text-aqua"
-              >
-                {m.email}
-                <span aria-hidden>→</span>
-              </a>
+              {m.email && (
+                <a
+                  href={`mailto:${m.email}`}
+                  className="mt-5 inline-flex items-center gap-1.5 text-xs font-medium tracking-wide text-navy transition-colors hover:text-aqua"
+                >
+                  {m.email}
+                  <span aria-hidden>→</span>
+                </a>
+              )}
             </div>
           </article>
         ))}
