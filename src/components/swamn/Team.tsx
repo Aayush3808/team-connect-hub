@@ -7,7 +7,7 @@ const team = [
     sub: "Strategy & Viability",
     desc: "Leads market analysis, viability assessment, and strategic positioning — connecting SWAMN's engineering to real-world impact.",
     initials: "AV",
-    email: "aviraajanand@swamn.com",
+    email: "",
   },
   {
     name: "Rishi Singh",
@@ -23,7 +23,7 @@ const team = [
     sub: "Identity & Outreach",
     desc: "Shapes SWAMN's visual identity, social presence, and digital communications — building a strong, premium identity for the initiative.",
     initials: "VR",
-    email: "vaibhavraj@swamn.com",
+    email: "",
   },
   {
     name: "Aayush Kumar Singh",
@@ -31,7 +31,7 @@ const team = [
     sub: "Identity & Outreach",
     desc: "Shapes SWAMN's visual identity, social presence, and digital communications — building a strong, premium identity for the initiative.",
     initials: "AK",
-    email: "aayushsingh@swamn.com",
+    email: "",
   },
   {
     name: "Manan",
@@ -39,7 +39,7 @@ const team = [
     sub: "Budget & Resources",
     desc: "Oversees budgeting, resource planning, and the financial stewardship that keeps SWAMN's development sustainable and accountable.",
     initials: "MN",
-    email: "mananmishra@swamn.com",
+    email: "",
   },
   {
     name: "Satvik",
@@ -47,7 +47,7 @@ const team = [
     sub: "Narrative & Presentation",
     desc: "Owns SWAMN's pitch end-to-end — shapes the narrative, builds the deck, and delivers it. Translates complex engineering and real-world impact into a clear, persuasive story that resonates with judges, partners, and investors.",
     initials: "SK",
-    email: "satvik@swamn.com",
+    email: "",
   },
   {
     name: "Annapurna",
@@ -55,7 +55,7 @@ const team = [
     sub: "People & Culture",
     desc: "Leads people operations at SWAMN — onboarding, team coordination, and culture. Keeps the team aligned, motivated, and moving in sync, ensuring every member has the clarity and support they need to do their best work.",
     initials: "AN",
-    email: "annapurna@swamn.com",
+    email: "",
   },
 ];
 
