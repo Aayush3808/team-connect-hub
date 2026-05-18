@@ -50,4 +50,4 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://swamn.lovable.app/sitemap.xml
+Sitemap: https://swamn.com/sitemap.xml
