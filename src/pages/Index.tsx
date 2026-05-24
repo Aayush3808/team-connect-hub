@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import { useReveal } from "@/hooks/useReveal";
 import { Nav } from "@/components/swamn/Nav";
 import { Hero } from "@/components/swamn/Hero";
