@@ -1,5 +1,6 @@
 import { useState, FormEvent } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { Logo } from "@/components/swamn/Logo";
 
 const Join = () => {
