@@ -1,5 +1,6 @@
 import { useState, FormEvent } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { Logo } from "@/components/swamn/Logo";
 
 const Join = () => {
@@ -28,6 +29,14 @@ const Join = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <Helmet>
+        <title>Join the Mission — SWAMN</title>
+        <meta name="description" content="Partner, sponsor, or join SWAMN — a student-led team building autonomous AI systems to clean oceans, rivers, and lakes." />
+        <link rel="canonical" href="https://swamn.com/join" />
+        <meta property="og:title" content="Join the Mission — SWAMN" />
+        <meta property="og:url" content="https://swamn.com/join" />
+        <meta property="og:description" content="Partner, sponsor, or join SWAMN — autonomous AI systems for cleaner water bodies." />
+      </Helmet>
       <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-[520px] bg-hero" />
       <div aria-hidden className="pointer-events-none absolute -top-32 left-1/2 h-[420px] w-[420px] -translate-x-1/2 rounded-full bg-aqua opacity-25 blur-3xl" />
 
