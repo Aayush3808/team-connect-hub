@@ -21,6 +21,12 @@ const Index = () => {
   useReveal();
   return (
     <main className="min-h-screen bg-background">
+      <Helmet>
+        <title>SWAMN — Autonomous AI Systems for Cleaner Oceans & Rivers</title>
+        <meta name="description" content="SWAMN builds autonomous, AI-assisted surface bots and smart docking stations that detect and collect floating plastic waste from oceans, rivers, and lakes." />
+        <link rel="canonical" href="https://swamn.com/" />
+        <meta property="og:url" content="https://swamn.com/" />
+      </Helmet>
       <Nav />
       <Hero />
       <Problem />
