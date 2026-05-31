@@ -10,20 +10,21 @@ export const About = () => (
             What is SWAMN
           </div>
           <h2 className="h-display text-4xl text-navy md:text-5xl">
-            An intelligent initiative for{" "}
-            <span className="h-serif text-gradient">cleaner aquatic ecosystems.</span>
+            An autonomous ecosystem for{" "}
+            <span className="h-serif text-gradient">cleaner waterways.</span>
           </h2>
           <p className="mt-6 text-base leading-relaxed text-muted-foreground md:text-lg">
-            SWAMN builds autonomous systems that identify, collect, and manage floating plastic
-            waste across oceans, rivers, and lakes. By combining AI-assisted monitoring, embedded
-            systems, coordinated movement, and sustainable engineering, we are creating scalable
-            solutions for the world's most critical waterways.
+            SWAMN is the Autonomous Marine Waste Aggregation and Retrieval Ecosystem — a
+            specialised team of Aggregation Bots, self-sealing Containment Pods, and Retrieval
+            Bots that work in coordination across rivers, harbours, urban lakes and
+            flood-affected zones. Detection, containment and transport are split into separate
+            roles so each unit stays lean and the fleet can operate 24/7.
           </p>
           <div className="mt-8 grid grid-cols-3 gap-4 text-sm">
             {[
-              ["Autonomous", "Self-navigating fleet"],
-              ["Sustainable", "Solar-powered ops"],
-              ["Scalable", "Modular by design"],
+              ["Specialised", "Three-role fleet"],
+              ["Continuous", "24-hour operation"],
+              ["Circular", "Waste-to-worth chain"],
             ].map(([t, s]) => (
               <div key={t} className="card-premium p-4">
                 <div className="font-medium text-navy">{t}</div>

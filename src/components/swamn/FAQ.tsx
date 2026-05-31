@@ -9,27 +9,31 @@ import {
 const faqs = [
   {
     q: "What exactly is SWAMN?",
-    a: "SWAMN is a student-led initiative building autonomous surface bots and smart docking stations that help clean rivers, lakes, and other water bodies using AI-driven navigation.",
+    a: "SWAMN — the Autonomous Marine Waste Aggregation and Retrieval Ecosystem — is a three-component fleet of Aggregation Bots, self-sealing Containment Pods and Retrieval Bots that clean rivers, harbours, urban lakes and flood-affected zones around the clock.",
   },
   {
-    q: "Who is behind SWAMN?",
-    a: "A small team of young innovators handling engineering, business strategy, branding, finance, and storytelling — see the Team section for everyone involved.",
+    q: "Why split the system into three units instead of one robot?",
+    a: "Role separation. The Aggregation Bot never carries waste, the Retrieval Bot is purpose-built for towing, and the pods need no power at all. This keeps each unit lean, dramatically lowers cost per tonne recovered, and enables true 24-hour operation.",
+  },
+  {
+    q: "How does the autonomous sealing work?",
+    a: "Once onboard AI detects that the U-shaped containment boom is full, high-strength neodymium magnets at both ends connect automatically, closing it into a sealed floating pod that broadcasts its GPS location for retrieval.",
+  },
+  {
+    q: "Is it safe for marine and aquatic life?",
+    a: "Yes. The 0.5 m submerged skirt deliberately has no bottom, reducing entanglement risk, and AI-based obstacle detection triggers an automated abort if fauna is detected near the boom.",
+  },
+  {
+    q: "Where will SWAMN be deployed?",
+    a: "Pilot zones include the Ganga, Yamuna and Godavari, followed by harbours, urban lakes and flood-response deployments — scaling toward open-water and coastal applications.",
+  },
+  {
+    q: "How does it pay for itself?",
+    a: "Recovered PET and HDPE fetch ₹6,000–15,000 per tonne, coconut shells become activated carbon, and ceremonial flowers turn into natural dyes and compost. Combined with municipal contracts, CSR funding and Namami Gange schemes, the river funds its own cleanup.",
   },
   {
     q: "How can I support or join the mission?",
     a: "Use the Join the Mission button to send us a message, suggest an idea, or apply to join the team. Anything you submit goes straight to support@swamn.com.",
-  },
-  {
-    q: "Is SWAMN open for partnerships or sponsorships?",
-    a: "Yes — schools, NGOs, sponsors and municipalities can reach out via support@swamn.com. We're actively looking for partners to deploy pilot units.",
-  },
-  {
-    q: "Where will SWAMN be deployed?",
-    a: "Our roadmap starts with local rivers, lakes and ponds, then scales to larger rivers, harbors and coastal zones — and ultimately to the open ocean. SWAMN is built for all water bodies, not just small ones.",
-  },
-  {
-    q: "Do you have a working prototype?",
-    a: "We're iterating on the bot and docking station design. Follow our updates or get in touch for the latest progress.",
   },
 ];
 
