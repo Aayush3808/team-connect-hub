@@ -3,24 +3,24 @@ import { SectionHeader } from "./SectionHeader";
 const layers = [
   {
     n: "01",
-    title: "Perception Layer",
-    tag: "Vision & AI",
-    desc: "Pi Camera Module v2 provides continuous live monitoring of the water surface. An AI-assisted classification pipeline identifies floating plastics in real time, even amid surface noise and reflections.",
-    points: ["Pi Camera Module v2", "AI-assisted detection", "Real-time waste recognition"],
+    title: "Aggregation Bot",
+    tag: "Detect & Contain",
+    desc: "An AI-powered surface vessel that patrols autonomously, identifies floating debris in real time, and deploys a U-shaped containment boom (50–60 m wide) from its rear chamber. It never carries waste — it herds, seals, and moves on.",
+    points: ["RGB cameras + ultrasonic sensing", "U-shaped hydrodynamic boom", "Autonomous magnet sealing"],
   },
   {
     n: "02",
-    title: "Control Layer",
-    tag: "Compute & Navigation",
-    desc: "A Raspberry Pi 5 paired with ESP32 modules orchestrates motors, sensors, and GPS telemetry. Together they coordinate intelligent, autonomous movement toward identified targets.",
-    points: ["Raspberry Pi 5 core", "ESP32 sensor mesh", "GPS guided navigation"],
+    title: "Containment Pod",
+    tag: "Self-Sealing Storage",
+    desc: "A buoyant U-shaped boom with a 0.5 m submerged skirt and no bottom — minimising drag and marine-life entanglement. High-strength neodymium magnets close the loop automatically once fill threshold is reached, turning it into a GPS-broadcasting floating pod.",
+    points: ["Neodymium magnet self-closure", "Open-bottom skirt for fauna safety", "Zero propulsion, zero power"],
   },
   {
     n: "03",
-    title: "Power Layer",
-    tag: "Sustainable Energy",
-    desc: "A solar charging dock and integrated battery management keep systems running for hours of continuous operation, with autonomous return-to-dock for sustained, off-grid deployment.",
-    points: ["Solar charging dock", "Battery management", "Auto return-to-dock"],
+    title: "Retrieval Bot",
+    tag: "Tow & Transport",
+    desc: "A solar-powered, catamaran-inspired vessel built purely for endurance towing. It homes in on a sealed pod's GPS beacon, docks via magnetic connectors, and tows it to the nearest recovery station — while Aggregation Bots keep cleaning, uninterrupted.",
+    points: ["Catamaran hull, solar drive", "GPS beacon homing", "High-endurance towing"],
   },
 ];
 
@@ -28,9 +28,9 @@ export const Architecture = () => (
   <section id="technology" className="relative py-28 md:py-36">
     <div className="container">
       <SectionHeader
-        eyebrow="System Architecture"
-        title={<>Three layers of <span className="h-serif text-gradient">intelligence</span></>}
-        description="A modular architecture that combines perception, control, and power into a single coordinated system — engineered to be reliable, sustainable, and elegantly simple."
+        eyebrow="The Ecosystem"
+        title={<>A three-component <span className="h-serif text-gradient">cleanup ecosystem</span></>}
+        description="SWAMN is not a single robot — it is a team. Detection, containment and transport are split across three specialised roles that work alongside each other, enabling continuous 24-hour operation without ever stopping to ferry waste back to shore."
       />
 
       <div className="mt-16 grid gap-6 md:grid-cols-3">
