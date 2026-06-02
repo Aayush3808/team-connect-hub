@@ -7,7 +7,7 @@ import { About } from "@/components/swamn/About";
 import { Architecture } from "@/components/swamn/Architecture";
 import { Workflow } from "@/components/swamn/Workflow";
 import { Performance } from "@/components/swamn/Performance";
-import { Hardware } from "@/components/swamn/Hardware";
+
 import { Impact } from "@/components/swamn/Impact";
 import { Achievements } from "@/components/swamn/Achievements";
 import { Team } from "@/components/swamn/Team";
@@ -34,7 +34,6 @@ const Index = () => {
       <Architecture />
       <Workflow />
       <Performance />
-      <Hardware />
       <Impact />
       <Achievements />
       <Team />
