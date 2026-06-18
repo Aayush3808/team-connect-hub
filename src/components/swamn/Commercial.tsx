@@ -71,12 +71,12 @@ export const Commercial = () => (
             <div className="bg-card p-4 text-[0.7rem] uppercase tracking-[0.18em] text-muted-foreground">WasteShark</div>
             <div className="bg-navy p-4 text-[0.7rem] uppercase tracking-[0.18em] text-aqua">SWAMN</div>
             {compare.map((row) => (
-              <>
-                <div key={row.c + "c"} className="bg-card p-4 text-navy/90">{row.c}</div>
-                <div key={row.c + "a"} className="bg-card p-4 text-muted-foreground">{row.a}</div>
-                <div key={row.c + "b"} className="bg-card p-4 text-muted-foreground">{row.b}</div>
-                <div key={row.c + "s"} className="bg-card p-4 text-navy font-medium">{row.s}</div>
-              </>
+              <div key={row.c} className="contents">
+                <div className="bg-card p-4 text-navy/90">{row.c}</div>
+                <div className="bg-card p-4 text-muted-foreground">{row.a}</div>
+                <div className="bg-card p-4 text-muted-foreground">{row.b}</div>
+                <div className="bg-card p-4 text-navy font-medium">{row.s}</div>
+              </div>
             ))}
           </div>
         </div>
