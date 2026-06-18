@@ -3,10 +3,11 @@ import { Link } from "react-router-dom";
 import { Logo } from "./Logo";
 
 const links = [
-  { href: "#technology", label: "Technology" },
-  { href: "#performance", label: "Performance" },
-  { href: "#impact", label: "Impact" },
-  { href: "#team", label: "Team" },
+  { href: "#technology", label: "Ecosystem" },
+  { href: "#performance", label: "Methodology" },
+  { href: "#commercial", label: "Viability" },
+  { href: "#algae", label: "Algae" },
+  { href: "#roadmap", label: "Roadmap" },
 ];
 
 export const Nav = () => {
