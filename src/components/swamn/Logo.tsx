@@ -16,7 +16,7 @@ export const Logo = ({ size = 32, variant = "default", withWordmark = true, clas
       >
         <img
           src={mark}
-          alt="SWAMN"
+          alt="SWAMN logo — Intelligent Ocean Systems"
           width={size}
           height={size}
           style={{ width: "100%", height: "100%", objectPosition: "center" }}
