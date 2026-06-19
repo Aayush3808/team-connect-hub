@@ -50,4 +50,4 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://swamn.com/sitemap.xml
+Sitemap: https://member-magic-nest.lovable.app/sitemap.xml

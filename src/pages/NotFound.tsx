@@ -13,7 +13,12 @@ const NotFound = () => {
     <div className="flex min-h-screen items-center justify-center bg-muted">
       <Helmet>
         <title>Page not found — SWAMN</title>
+        <meta name="description" content="The page you were looking for doesn't exist. Return to the SWAMN homepage." />
         <meta name="robots" content="noindex, follow" />
+        <link rel="canonical" href="https://member-magic-nest.lovable.app/404" />
+        <meta property="og:title" content="Page not found — SWAMN" />
+        <meta property="og:description" content="The page you were looking for doesn't exist." />
+        <meta property="og:url" content="https://member-magic-nest.lovable.app/404" />
       </Helmet>
       <div className="text-center">
         <h1 className="mb-4 text-4xl font-bold">404</h1>
