@@ -18,21 +18,42 @@ export const Performance = () => (
         description="Six continuous stages that run quietly in the background — cleaning a waterway while the city around it sleeps, wakes, or goes about its day."
       />
 
-      <div className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {stages.map((c, i) => (
-          <div
-            key={c.t}
-            className="reveal card-premium group overflow-hidden p-7 transition-all hover:-translate-y-0.5"
-            style={{ transitionDelay: `${i * 50}ms` }}
-          >
-            <div className="flex items-center gap-3">
-              <span aria-hidden className="h-2 w-2 rounded-full bg-aqua" />
-              <div className="text-[0.65rem] uppercase tracking-[0.22em] text-muted-foreground">Stage {String(i + 1).padStart(2, "0")}</div>
-            </div>
-            <div className="mt-5 h-display text-xl text-navy">{c.t}</div>
-            <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{c.d}</p>
-          </div>
-        ))}
+      <div className="relative mx-auto mt-16 max-w-3xl">
+        {/* Vertical connector line */}
+        <div aria-hidden className="pointer-events-none absolute left-[15px] top-2 bottom-2 w-px bg-gradient-to-b from-aqua/60 via-border to-transparent md:left-1/2 md:-translate-x-1/2" />
+
+        <ol className="space-y-10">
+          {stages.map((c, i) => (
+            <li
+              key={c.t}
+              className={`reveal relative md:flex md:items-center md:gap-10 ${
+                i % 2 === 1 ? "md:flex-row-reverse" : ""
+              }`}
+              style={{ transitionDelay: `${i * 60}ms` }}
+            >
+              {/* Dot */}
+              <span
+                aria-hidden
+                className="absolute left-[7px] top-3 z-10 flex h-4 w-4 items-center justify-center rounded-full border-2 border-card bg-aqua shadow-glow md:left-1/2 md:-translate-x-1/2"
+              />
+
+              {/* Card */}
+              <div className={`card-premium ml-12 p-6 md:ml-0 md:w-[calc(50%-2.5rem)] ${i % 2 === 1 ? "md:text-right" : ""}`}>
+                <div className={`flex items-center gap-3 ${i % 2 === 1 ? "md:justify-end" : ""}`}>
+                  <span aria-hidden className="h-2 w-2 rounded-full bg-aqua" />
+                  <div className="text-[0.65rem] uppercase tracking-[0.22em] text-muted-foreground">
+                    Stage {String(i + 1).padStart(2, "0")}
+                  </div>
+                </div>
+                <div className="mt-4 h-display text-xl text-navy">{c.t}</div>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{c.d}</p>
+              </div>
+
+              {/* Spacer for opposite column on desktop */}
+              <div aria-hidden className="hidden md:block md:w-[calc(50%-2.5rem)]" />
+            </li>
+          ))}
+        </ol>
       </div>
     </div>
   </section>
