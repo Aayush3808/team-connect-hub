@@ -19,6 +19,8 @@ import { CTA } from "@/components/swamn/CTA";
 import { FAQ } from "@/components/swamn/FAQ";
 import { Footer } from "@/components/swamn/Footer";
 import { Chatbot } from "@/components/swamn/Chatbot";
+import { ScrollProgress } from "@/components/swamn/ScrollProgress";
+import { BackToTop } from "@/components/swamn/BackToTop";
 
 const Index = () => {
   useReveal();
@@ -45,6 +47,7 @@ const Index = () => {
           ]
         })}</script>
       </Helmet>
+      <ScrollProgress />
       <Nav />
       <Hero />
       <Problem />
@@ -64,6 +67,7 @@ const Index = () => {
       <FAQ />
       <Footer />
       <Chatbot />
+      <BackToTop />
     </main>
   );
 };
