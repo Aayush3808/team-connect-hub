@@ -27,10 +27,10 @@ const Index = () => {
       <Helmet>
         <title>SWAMN — Autonomous AI Cleanup for Rivers & Oceans</title>
         <meta name="description" content="SWAMN deploys autonomous AI bots and self-sealing pods to clean rivers, lakes and harbours continuously, 24/7." />
-        <link rel="canonical" href="https://member-magic-nest.lovable.app/" />
+        <link rel="canonical" href="https://swamn.com/" />
         <meta property="og:title" content="SWAMN — Autonomous AI Cleanup for Rivers & Oceans" />
         <meta property="og:description" content="A three-part autonomous fleet — Aggregation Bots, Containment Pods, Retrieval Bots — cleaning waterways around the clock." />
-        <meta property="og:url" content="https://member-magic-nest.lovable.app/" />
+        <meta property="og:url" content="https://swamn.com/" />
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
           "@type": "FAQPage",
