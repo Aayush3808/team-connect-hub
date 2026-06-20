@@ -111,7 +111,9 @@ export const Chatbot = () => {
       <button
         onClick={() => setOpen((o) => !o)}
         aria-label={open ? "Close chat" : "Open chat"}
-        className="fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-navy text-primary-foreground shadow-glow transition-transform hover:scale-105"
+        className={`fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-navy text-primary-foreground shadow-glow transition-all hover:scale-105 ${
+          open ? "" : "animate-pulse-ring"
+        }`}
       >
         {open ? (
           <span className="text-xl">×</span>
@@ -158,7 +160,11 @@ export const Chatbot = () => {
               </div>
             ))}
             {loading && (
-              <div className="text-xs text-muted-foreground">Thinking…</div>
+              <div className="flex items-center gap-1.5 px-1 text-xs text-muted-foreground" aria-live="polite">
+                <span className="h-1.5 w-1.5 rounded-full bg-navy/60" style={{ animation: "typing-dot 1.2s infinite", animationDelay: "0s" }} />
+                <span className="h-1.5 w-1.5 rounded-full bg-navy/60" style={{ animation: "typing-dot 1.2s infinite", animationDelay: "0.15s" }} />
+                <span className="h-1.5 w-1.5 rounded-full bg-navy/60" style={{ animation: "typing-dot 1.2s infinite", animationDelay: "0.3s" }} />
+              </div>
             )}
           </div>
 

@@ -31,6 +31,9 @@ export const Footer = () => (
           <div className="text-[0.7rem] uppercase tracking-[0.22em] text-muted-foreground">Competing in</div>
           <div className="mt-4 text-sm text-navy">Stockholm Junior Water Prize</div>
           <div className="text-sm text-muted-foreground">India · 2026</div>
+          <a href="mailto:support@swamn.com" className="story-link mt-4 inline-block text-sm text-navy">
+            support@swamn.com
+          </a>
         </div>
       </div>
 

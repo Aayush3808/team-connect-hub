@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 export const CTA = () => (
   <section id="cta" className="relative overflow-hidden py-28 md:py-36">
     <div aria-hidden className="absolute inset-0 bg-navy" />
+    {/* Animated mesh */}
+    <div aria-hidden className="absolute inset-0 bg-mesh opacity-50 animate-mesh-shift" />
     <div aria-hidden className="absolute inset-0 opacity-60"
          style={{ background: "radial-gradient(60% 60% at 50% 0%, hsl(var(--aqua)/0.55), transparent 70%)" }} />
     <div aria-hidden className="absolute -bottom-32 left-1/2 h-[480px] w-[480px] -translate-x-1/2 rounded-full opacity-30 blur-3xl animate-float-slow"
