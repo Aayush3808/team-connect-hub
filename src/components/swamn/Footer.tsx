@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Logo } from "./Logo";
 
 export const Footer = () => (
@@ -19,18 +20,19 @@ export const Footer = () => (
         </div>
 
         <div>
-          <div className="text-[0.7rem] uppercase tracking-[0.22em] text-muted-foreground">Origin</div>
-          <div className="mt-4 space-y-1.5 text-sm text-navy">
-            <div>Sunbeam School</div>
-            <div className="text-muted-foreground">Mughalsarai</div>
-            <div className="text-muted-foreground">Uttar Pradesh, India</div>
-          </div>
+          <div className="text-[0.7rem] uppercase tracking-[0.22em] text-muted-foreground">Explore</div>
+          <ul className="mt-4 space-y-2 text-sm text-navy">
+            <li><Link to="/updates" className="story-link">Updates</Link></li>
+            <li><Link to="/sponsors" className="story-link">Sponsors</Link></li>
+            <li><Link to="/press" className="story-link">Press kit</Link></li>
+            <li><Link to="/join" className="story-link">Join the mission</Link></li>
+          </ul>
         </div>
 
         <div>
           <div className="text-[0.7rem] uppercase tracking-[0.22em] text-muted-foreground">Mission</div>
           <div className="mt-4 text-sm text-navy">Student-led environmental innovation</div>
-          <div className="text-sm text-muted-foreground">Cleaner rivers, lakes & oceans</div>
+          <div className="text-sm text-muted-foreground">Sunbeam School, Mughalsarai</div>
           <a href="mailto:support@swamn.com" className="story-link mt-4 inline-block text-sm text-navy">
             support@swamn.com
           </a>
@@ -46,3 +48,4 @@ export const Footer = () => (
     </div>
   </footer>
 );
+
