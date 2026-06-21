@@ -6,6 +6,9 @@ SWAMN is a student-led environmental engineering initiative from Sunbeam School,
 
 ## Pages
 - [Home](/): Mission, technology, team, impact, and roadmap.
+- [Updates](/updates): Blog posts, milestones, and field notes.
+- [Sponsors & Partners](/sponsors): Sponsorship tiers and how to support SWAMN.
+- [Press Kit](/press): Brand assets, boilerplate, and press contact.
 - [Join the Mission](/join): Contact form for partnerships, sponsorships, and team applications.
 
 ## Topics
