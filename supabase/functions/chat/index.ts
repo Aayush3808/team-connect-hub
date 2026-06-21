@@ -13,7 +13,7 @@ SWAMN is a student-led environmental engineering initiative building autonomous,
 
 Mission: Cleaner waters everywhere through smart, affordable, autonomous environmental tech.
 
-Origin: Sunbeam School, Mughalsarai, Uttar Pradesh, India. Competing in the Stockholm Junior Water Prize (India, 2026).
+Origin: Sunbeam School, Mughalsarai, Uttar Pradesh, India. A student-led environmental innovation initiative.
 
 Aligned with UN Sustainable Development Goals:
 • SDG 14 — Life Below Water (primary)

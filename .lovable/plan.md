@@ -1,59 +1,44 @@
+Plan: Remove Stockholm Junior Water Prize + focused SEO & trust upgrades
 
-# Visual & Interaction Upgrades
+## 1. Remove all Stockholm Junior Water Prize references
+Clean up every mention so the site does not advertise a competition SWAMN is no longer part of.
+- `index.html`: remove "Stockholm Junior Water Prize" from the keywords meta tag.
+- `public/llms.txt`: rewrite the project description and Topics list to remove SJWP 2026.
+- `src/components/swamn/Footer.tsx`: replace the "Competing in" block with a new, accurate label (e.g., "Mission" / "Student-led innovation" or a relevant recognition line).
+- `supabase/functions/chat/index.ts`: remove "Competing in the Stockholm Junior Water Prize (India, 2026)" from the chatbot system prompt.
 
-A focused polish pass — no new features, no backend, no content rewrites. Everything stays frontend.
+## 2. Fix domain-aligned social sharing image
+The current OG/Twitter image is hosted on `storage.googleapis.com/...` (Lovable upload URL). For branding and search trust, move it to the `swamn.com` domain.
+- Add the social image asset to `public/og-image.webp` (or `.jpg`).
+- Update `index.html` OG and Twitter image URLs to `https://swamn.com/og-image.webp`.
+- Add `og:image:width`, `og:image:height`, and `twitter:image:alt` tags.
 
-## 1. Hero — cinematic upgrade
-- Add an animated **water ripple / particles** layer behind the logo (MagicUI `Ripple` or `Particles` in aqua tones) instead of the current static blurred blobs.
-- Replace the static `<h1>` with **Word Rotate** on the accent word: "intelligent systems" → cycles "intelligent systems / autonomous fleets / circular cleanup".
-- Add a subtle **BorderBeam** around the hero ocean image card.
-- Stats row: count-up animation on numbers when they scroll into view, plus a soft hover lift.
+## 3. Strengthen structured data for search ranking
+- Keep the existing Organization and WebSite JSON-LD.
+- Add a `BreadcrumbList` JSON-LD snippet for `/` and `/join`.
+- Add `ImageObject` structured data for the new self-hosted OG image.
+- Add `sameAs` placeholders for future social profiles (Instagram, LinkedIn, YouTube, GitHub) so the brand graph can be completed later.
 
-## 2. Sticky scroll progress + section reveals
-- Thin aqua **scroll progress bar** fixed at the top under the nav.
-- Upgrade `useReveal` so cards stagger in with a slight scale + blur-out-to-in, not just a fade.
-- Smooth-scroll behavior tuned (already partly there) with a small offset for the sticky nav so anchor links don't hide headings.
+## 4. Sitemap improvements
+- Add `<lastmod>` dates and ISO timestamps to both URLs.
+- Keep `priority` and `changefreq` values.
 
-## 3. Navigation polish
-- Active section highlighting in the nav (current link gets the aqua dot + navy text as you scroll).
-- Add a proper **mobile menu** (currently hidden on mobile) — slide-down sheet with the same links + Join CTA.
-- Logo gets a tiny hover micro-interaction (slow rotate of the inner shape).
+## 5. Add Google Search Console verification support
+- Add an optional meta tag in `index.html` for Search Console site verification if the user provides a verification code.
+- If no code is provided, leave a clearly commented placeholder.
 
-## 4. Team section — premium cards
-- Replace the flat initials gradient with a **MagicCard spotlight** effect (cursor-follow glow) on each member card.
-- Add a hover state that reveals a small "Contact" pill for members with emails, and slides the bio up slightly.
-- Tighten grid so 5+ members balance better on lg (3 cols stays, but last row centers).
+## 6. Optional: lightweight analytics
+- Offer to add a Google Analytics 4 or Microsoft Clarity snippet if the user shares an ID.
+- Default to not adding anything if no ID is provided.
 
-## 5. Workflow / Methodology — connected timeline
-- Turn the 6 "Stage" cards into a **vertical timeline on desktop** with a thin aqua connector line and animated dot that fills as you scroll.
-- On mobile, keep stacked cards but add the connector.
+## Out of scope (requires bigger decisions)
+- New pages (blog, press kit, careers).
+- Real photography or video.
+- Paid ads or backlink campaigns.
+- Backend form handling (email capture).
 
-## 6. Architecture / About — depth + motion
-- About section's "2025 Prototype" disc gets a slow rotating ring + the inner gradient gently animates (already drifts; add a second counter-rotating layer).
-- Add **AnimatedBeam**-style connectors between the three units (Aggregation → Pod → Retrieval) in the Architecture section to visually express the fleet relationship.
-
-## 7. FAQ — smoother accordion
-- Use shadcn Accordion (already installed) instead of whatever's there now, with a soft chevron rotate and content fade.
-
-## 8. Chatbot polish
-- Add a small **pulse ring** on the closed chat button to draw attention on first load (auto-dismisses after first open).
-- Smoother open/close (scale + fade from the button origin).
-- Typing dots indicator instead of "Thinking…" text.
-
-## 9. CTA + Footer
-- CTA section: add a soft animated gradient mesh background behind the heading.
-- Footer: add subtle hover underlines (`story-link`) on links, and a small "Back to top" floating button that appears after 800px scroll.
-
-## 10. Global micro-polish
-- Image lazy-loading + `decoding="async"` on every `<img>` for perceived speed.
-- Reduced-motion respect: wrap heavy animations in `prefers-reduced-motion: no-preference` so accessibility isn't broken.
-- Consistent focus rings (aqua outline) on all interactive elements for keyboard users.
-
-## Technical notes
-- New dependency: **MagicUI components** (Ripple, BorderBeam, MagicCard, AnimatedBeam, WordRotate) — installed individually per their docs, no extra runtime.
-- No changes to `Index.tsx` section order, no content edits, no backend, no SEO changes.
-- All animations gated behind `prefers-reduced-motion`.
-
----
-
-Want me to do **all 10**, or pick the top 3–4 you care about most? (If you say "go", I'll do everything.)
+## Acceptance criteria
+- `rg -i "Stockholm|Junior Water Prize|SJWP"` returns zero results in the web-facing source.
+- All social image URLs point to `swamn.com`.
+- `sitemap.xml` validates and contains `lastmod`.
+- No console or build errors.
