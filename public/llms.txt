@@ -2,7 +2,7 @@
 
 > SWAMN builds autonomous, AI-assisted systems that detect and collect floating plastic waste from oceans, rivers, and water bodies.
 
-SWAMN is a student-led environmental engineering initiative from Sunbeam School, Mughalsarai (Uttar Pradesh, India). The team designs autonomous surface bots and smart docking stations that use computer vision and AI-driven navigation to clean rivers, lakes, and coastal waters. SWAMN is competing in the Stockholm Junior Water Prize (India, 2026) and aligns its work with UN Sustainable Development Goals 14 (Life Below Water), 12 (Responsible Consumption), and 7 (Affordable Clean Energy).
+SWAMN is a student-led environmental engineering initiative from Sunbeam School, Mughalsarai (Uttar Pradesh, India). The team designs autonomous surface bots and smart docking stations that use computer vision and AI-driven navigation to clean rivers, lakes, and coastal waters. SWAMN aligns its work with UN Sustainable Development Goals 14 (Life Below Water), 12 (Responsible Consumption), and 7 (Affordable Clean Energy).
 
 ## Pages
 - [Home](/): Mission, technology, team, impact, and roadmap.
@@ -13,7 +13,6 @@ SWAMN is a student-led environmental engineering initiative from Sunbeam School,
 - AI-assisted plastic detection and navigation
 - Solar-powered, modular docking stations
 - Student-led environmental engineering
-- Stockholm Junior Water Prize 2026 (India)
 
 ## Contact
 - Email: support@swamn.com
