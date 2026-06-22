@@ -1,72 +1,44 @@
-Plan: Round 2 upgrades — imagery, trust, perf/a11y, three new pages, real contact form
+Plan: Remove Stockholm Junior Water Prize + focused SEO & trust upgrades
 
-## A. AI-generated imagery (placeholders, swappable later)
-- Generate 3 hero/illustration images via imagegen and wire into:
-  - `Hero.tsx` — ocean/bot illustration replacing current asset
-  - `About.tsx` — prototype/architecture illustration
-  - `Team.tsx` — silhouette/team-vibe banner (initials stay on cards; banner adds warmth)
-- All saved to `src/assets/` and imported as ES6 modules. Marked as "illustration" via alt text so they don't read as real photos.
+## 1. Remove all Stockholm Junior Water Prize references
+Clean up every mention so the site does not advertise a competition SWAMN is no longer part of.
+- `index.html`: remove "Stockholm Junior Water Prize" from the keywords meta tag.
+- `public/llms.txt`: rewrite the project description and Topics list to remove SJWP 2026.
+- `src/components/swamn/Footer.tsx`: replace the "Competing in" block with a new, accurate label (e.g., "Mission" / "Student-led innovation" or a relevant recognition line).
+- `supabase/functions/chat/index.ts`: remove "Competing in the Stockholm Junior Water Prize (India, 2026)" from the chatbot system prompt.
 
-## B. Trust & social proof
-- New `Testimonials.tsx` section between `Achievements` and `Team` on `/`.
-- 3 placeholder quotes attributed generically: "Science Mentor — Sunbeam School", "District Innovation Coordinator", "Parent & Supporter". Clearly editable copy.
-- New `Partners.tsx` strip (logo wall) above the footer with 4–6 SVG placeholder badges (school, district, SDG, innovation council). Tasteful greyscale, hover color.
-- Animated counter row on stats already shown in Hero (subtle count-up on view).
+## 2. Fix domain-aligned social sharing image
+The current OG/Twitter image is hosted on `storage.googleapis.com/...` (Lovable upload URL). For branding and search trust, move it to the `swamn.com` domain.
+- Add the social image asset to `public/og-image.webp` (or `.jpg`).
+- Update `index.html` OG and Twitter image URLs to `https://swamn.com/og-image.webp`.
+- Add `og:image:width`, `og:image:height`, and `twitter:image:alt` tags.
 
-## C. Performance & accessibility
-- Lazy-load below-the-fold sections in `Index.tsx` with `React.lazy` + `Suspense` (Performance, Algae, FutureScope, Achievements, Roadmap, FAQ, Team).
-- Add `loading="lazy" decoding="async"` to all `<img>` not in the hero; preload the hero image in `index.html`.
-- Add `aria-label`s on every icon-only button (chatbot toggle, back-to-top, mobile nav toggle).
-- Replace any `h-screen` with `h-dvh`.
-- Audit color contrast on `text-muted-foreground` over `bg-soft`; bump where AA fails.
-- Ensure single `<main>` per route, semantic `<nav> <section> <article>`, proper heading order.
-- Add `prefers-reduced-motion` gating to count-up + new ripple/beam animations (already present in CSS — verify).
+## 3. Strengthen structured data for search ranking
+- Keep the existing Organization and WebSite JSON-LD.
+- Add a `BreadcrumbList` JSON-LD snippet for `/` and `/join`.
+- Add `ImageObject` structured data for the new self-hosted OG image.
+- Add `sameAs` placeholders for future social profiles (Instagram, LinkedIn, YouTube, GitHub) so the brand graph can be completed later.
 
-## D. New pages (added to `App.tsx` + `sitemap.xml` + footer nav)
-1. **`/updates` — Blog (Lovable Cloud DB-backed)**
-   - Enable Lovable Cloud.
-   - Table `posts` (id, slug, title, excerpt, content_md, cover_url, published_at, author).
-   - RLS: public SELECT for `published_at IS NOT NULL`; INSERT/UPDATE/DELETE limited to authenticated admins via `user_roles` + `has_role()` (per project rules).
-   - Pages: `/updates` (list) and `/updates/:slug` (detail, renders markdown).
-   - Minimal admin: `/updates/new` gated by admin role with a simple form. Seed 2 example posts via insert tool.
-   - SEO: per-post `<title>`, canonical, `Article` JSON-LD, OG image.
-2. **`/press` — Press kit (static)**
-   - Brand assets: downloadable logo (PNG/SVG), color tokens, one-paragraph boilerplate, founder bios, contact email, hi-res hero image. All from existing assets / generated illustrations.
-3. **`/sponsors` — Sponsors & Partners (static)**
-   - Three sponsorship tiers (Friend / Catalyst / Patron) with what's included.
-   - "Become a sponsor" CTA → opens contact form prefilled with intent=sponsor.
-   - Reuses Partners logo strip.
+## 4. Sitemap improvements
+- Add `<lastmod>` dates and ISO timestamps to both URLs.
+- Keep `priority` and `changefreq` values.
 
-## E. Real contact form (replace mailto on `/join` + new sponsor inquiries)
-- Table `contact_submissions` (id, name, email, intent, benefit, message, created_at, status, source) with RLS:
-  - Public INSERT (anonymous form submission allowed).
-  - SELECT/UPDATE: admins only via `has_role()`.
-- Rewrite `Join.tsx` to submit via supabase client; show success/error toasts.
-- Edge function `notify-submission` sends an email to `support@swamn.com` on insert (using Lovable's app email infra). If email infra isn't ready, scaffold it.
-- Add zod validation server-side mirroring client-side limits (name ≤100, email valid ≤255, benefit ≤1000, message ≤2000).
-- Add honeypot field + 5s minimum form fill time for spam mitigation.
+## 5. Add Google Search Console verification support
+- Add an optional meta tag in `index.html` for Search Console site verification if the user provides a verification code.
+- If no code is provided, leave a clearly commented placeholder.
 
-## F. Footer & nav updates
-- Nav: add Updates link.
-- Footer: link to Updates, Press, Sponsors. Keep mission column.
-- Update `sitemap.xml` to include `/updates`, `/press`, `/sponsors` and dynamic post URLs (static list for now; regenerated when posts change is out of scope — note to user).
-- Update `llms.txt` Pages list.
+## 6. Optional: lightweight analytics
+- Offer to add a Google Analytics 4 or Microsoft Clarity snippet if the user shares an ID.
+- Default to not adding anything if no ID is provided.
 
-## Technical notes
-- New deps: none required (markdown rendering via existing react-markdown if installed, else `marked` — will add `marked` if missing).
-- Lovable Cloud: enable before DB work.
-- All grants follow the public-schema GRANT rule.
-- Admin auth: bare-bones — email/password sign-in on `/updates/new`; user gets `admin` role via SQL by the project owner. Documented in a comment.
+## Out of scope (requires bigger decisions)
+- New pages (blog, press kit, careers).
+- Real photography or video.
+- Paid ads or backlink campaigns.
+- Backend form handling (email capture).
 
-## Out of scope (flag for user)
-- Real photos (will need uploads).
-- Dynamic sitemap regeneration on post publish.
-- Full admin dashboard / WYSIWYG editor.
-- Marketing/newsletter emails (not allowed by platform).
-
-## Acceptance
-- All three new routes render and are linked from footer.
-- `/updates` lists seeded posts; `/updates/:slug` renders content.
-- `/join` submits a real DB row and triggers an email to support@swamn.com.
-- Lighthouse a11y ≥ 95, perf ≥ 90 on mobile.
-- No new console errors; build green.
+## Acceptance criteria
+- `rg -i "Stockholm|Junior Water Prize|SJWP"` returns zero results in the web-facing source.
+- All social image URLs point to `swamn.com`.
+- `sitemap.xml` validates and contains `lastmod`.
+- No console or build errors.

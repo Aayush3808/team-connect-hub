@@ -74,12 +74,6 @@ export const Nav = () => {
         </nav>
         <div className="flex items-center gap-2">
           <Link
-            to="/updates"
-            className="hidden md:inline-flex h-9 items-center rounded-full px-3 text-xs font-medium text-navy/80 hover:text-navy"
-          >
-            Updates
-          </Link>
-          <Link
             to="/join"
             className="hidden sm:inline-flex h-9 items-center rounded-full bg-navy px-4 text-xs font-medium tracking-wide text-primary-foreground transition-all hover:bg-navy-deep"
           >
@@ -117,13 +111,6 @@ export const Nav = () => {
                 {l.label}
               </a>
             ))}
-            <Link
-              to="/updates"
-              onClick={() => setOpen(false)}
-              className="rounded-xl px-3 py-2.5 transition-colors hover:bg-secondary"
-            >
-              Updates
-            </Link>
             <Link
               to="/join"
               onClick={() => setOpen(false)}
