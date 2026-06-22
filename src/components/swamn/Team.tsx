@@ -32,7 +32,7 @@ const team = [
     sub: "Identity & Outreach",
     desc: "Shapes SWAMN's visual identity, social presence, and digital communications — building a strong, premium identity for the initiative.",
     initials: "AK",
-    email: "",
+    email: "aayushsingh@swamn.com",
   },
   {
     name: "Manan",
