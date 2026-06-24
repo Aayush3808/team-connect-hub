@@ -22,9 +22,15 @@ import { Chatbot } from "@/components/swamn/Chatbot";
 import { ScrollProgress } from "@/components/swamn/ScrollProgress";
 import { BackToTop } from "@/components/swamn/BackToTop";
 import { UnderwaterScene } from "@/components/swamn/UnderwaterScene";
+import { BotShowcase } from "@/components/swamn/BotShowcase";
+import { useEffect } from "react";
+import { initSmoothScroll } from "@/lib/scroll";
 
 const Index = () => {
   useReveal();
+  useEffect(() => {
+    initSmoothScroll();
+  }, []);
   return (
     <main className="relative min-h-screen bg-transparent">
       <Helmet>
@@ -53,10 +59,11 @@ const Index = () => {
         <ScrollProgress />
         <Nav />
         <Hero />
-      <Problem />
-      <About />
-      <Architecture />
-      <Workflow />
+        <Problem />
+        <About />
+        <Architecture />
+        <BotShowcase />
+        <Workflow />
       <Performance />
       <Impact />
       <Commercial />

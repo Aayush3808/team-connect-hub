@@ -1,6 +1,6 @@
 import { Logo } from "./Logo";
 import { WordRotate } from "./WordRotate";
-import heroOcean from "@/assets/hero-ocean.jpg";
+import { HeroBot } from "./HeroBot";
 
 const stats = [
   { v: "Autonomous", l: "Self-navigating operation" },
@@ -74,19 +74,16 @@ export const Hero = () => {
           </div>
         </div>
 
-        {/* Hero ocean visual with animated border beam */}
+        {/* Hero 3D bot — replaces the static ocean image */}
         <div className="relative mx-auto mt-20 max-w-6xl animate-fade-up" style={{ animationDelay: "240ms" }}>
           <div className="border-beam relative overflow-hidden rounded-[2rem] border border-border/70 shadow-card">
-            <img
-              src={heroOcean}
-              alt="Calm open ocean at sunrise"
-              width={1920}
-              height={1280}
-              loading="lazy"
-              decoding="async"
-              className="h-[42vh] min-h-[320px] w-full object-cover md:h-[58vh]"
-            />
-            <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/10 to-transparent" />
+            <HeroBot className="h-[52vh] min-h-[420px] w-full md:h-[68vh]" />
+            <div aria-hidden className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-background/95 to-transparent" />
+            <div className="absolute bottom-5 left-1/2 -translate-x-1/2 text-center">
+              <div className="rounded-full border border-primary-foreground/20 bg-navy-deep/40 px-4 py-1.5 text-[11px] uppercase tracking-[0.28em] text-primary-foreground/80 backdrop-blur-md">
+                Move your cursor · Scroll to dive
+              </div>
+            </div>
           </div>
 
           {/* Stats — overlap card */}
