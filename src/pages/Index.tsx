@@ -59,10 +59,11 @@ const Index = () => {
         <ScrollProgress />
         <Nav />
         <Hero />
-      <Problem />
-      <About />
-      <Architecture />
-      <Workflow />
+        <Problem />
+        <About />
+        <Architecture />
+        <BotShowcase />
+        <Workflow />
       <Performance />
       <Impact />
       <Commercial />
