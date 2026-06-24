@@ -63,7 +63,6 @@ function Bubbles({ count = 90 }: { count?: number }) {
 
 export const HeroBot = ({ className = "" }: { className?: string }) => {
   const velRef = useRef(0);
-  useFrame ? null : null; // ensure import noop in tree-shaken builds
   useEffect(() => {
     let raf = 0;
     const tick = () => {
