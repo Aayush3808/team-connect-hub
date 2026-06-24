@@ -48,9 +48,11 @@ const Index = () => {
           ]
         })}</script>
       </Helmet>
-      <ScrollProgress />
-      <Nav />
-      <Hero />
+      <UnderwaterScene />
+      <div className="relative z-10">
+        <ScrollProgress />
+        <Nav />
+        <Hero />
       <Problem />
       <About />
       <Architecture />
