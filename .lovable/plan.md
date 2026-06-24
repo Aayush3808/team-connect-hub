@@ -1,44 +1,70 @@
-Plan: Remove Stockholm Junior Water Prize + focused SEO & trust upgrades
 
-## 1. Remove all Stockholm Junior Water Prize references
-Clean up every mention so the site does not advertise a competition SWAMN is no longer part of.
-- `index.html`: remove "Stockholm Junior Water Prize" from the keywords meta tag.
-- `public/llms.txt`: rewrite the project description and Topics list to remove SJWP 2026.
-- `src/components/swamn/Footer.tsx`: replace the "Competing in" block with a new, accurate label (e.g., "Mission" / "Student-led innovation" or a relevant recognition line).
-- `supabase/functions/chat/index.ts`: remove "Competing in the Stockholm Junior Water Prize (India, 2026)" from the chatbot system prompt.
+# Make SWAMN feel like a real 3D premium site
 
-## 2. Fix domain-aligned social sharing image
-The current OG/Twitter image is hosted on `storage.googleapis.com/...` (Lovable upload URL). For branding and search trust, move it to the `swamn.com` domain.
-- Add the social image asset to `public/og-image.webp` (or `.jpg`).
-- Update `index.html` OG and Twitter image URLs to `https://swamn.com/og-image.webp`.
-- Add `og:image:width`, `og:image:height`, and `twitter:image:alt` tags.
+Right now the underwater scene sits behind a heavy readability veil, so the bot barely registers. The fix is three things: **bring 3D into the foreground in dedicated moments**, **rebuild the bot to match your real CAD**, and **make scroll feel instant and physical**.
 
-## 3. Strengthen structured data for search ranking
-- Keep the existing Organization and WebSite JSON-LD.
-- Add a `BreadcrumbList` JSON-LD snippet for `/` and `/join`.
-- Add `ImageObject` structured data for the new self-hosted OG image.
-- Add `sameAs` placeholders for future social profiles (Instagram, LinkedIn, YouTube, GitHub) so the brand graph can be completed later.
+## 1. Rebuild the bot to match your model
 
-## 4. Sitemap improvements
-- Add `<lastmod>` dates and ISO timestamps to both URLs.
-- Keep `priority` and `changefreq` values.
+Procedurally model it from primitives in Three.js to match the renders you shared:
 
-## 5. Add Google Search Console verification support
-- Add an optional meta tag in `index.html` for Search Console site verification if the user provides a verification code.
-- If no code is provided, leave a clearly commented placeholder.
+- Deep-navy rounded-rectangle hull (capsule + box), glossy clear-coat material (high metalness, low roughness, strong env reflections)
+- Embossed `SWAMN` wordmark on the side (extruded text geometry, same navy with rim light)
+- Top antenna module: small black housing + green LED cube + brass camera lens (emissive)
+- Two angled support struts going down from the hull
+- Two angled propeller pods at the bottom of the struts, with spinning 3-blade props (light blue tint, metallic)
+- Soft contact shadow plane and a subtle clear-coat highlight pass
 
-## 6. Optional: lightweight analytics
-- Offer to add a Google Analytics 4 or Microsoft Clarity snippet if the user shares an ID.
-- Default to not adding anything if no ID is provided.
+## 2. Move 3D from background → foreground
 
-## Out of scope (requires bigger decisions)
-- New pages (blog, press kit, careers).
-- Real photography or video.
-- Paid ads or backlink campaigns.
-- Backend form handling (email capture).
+Replace the always-on fullscreen veil with a hybrid:
 
-## Acceptance criteria
-- `rg -i "Stockholm|Junior Water Prize|SJWP"` returns zero results in the web-facing source.
-- All social image URLs point to `swamn.com`.
-- `sitemap.xml` validates and contains `lastmod`.
-- No console or build errors.
+- **Hero**: large floating bot center-stage, slowly rotating, with parallax tilt on cursor. Replaces the current static ocean image card.
+- **Between sections**: bot becomes a pinned "swimmer" that traverses the page. Uses `position: sticky` + scroll progress so it overtakes you as you read, then hands off to the next section.
+- **Architecture / Workflow section**: pinned scroll sequence — bot rotates 360°, hotspots fade in pointing to hull / antenna / propellers / boom with labels. This is the "wow" moment.
+- **Footer**: bot descends into deep water, lights dim, bubbles trail upward.
+
+The fullscreen underwater canvas stays, but only as a thin atmospheric layer (caustics + bubbles) behind transparent section gaps — not behind every card. Readability is preserved because real content cards keep their solid surfaces.
+
+## 3. Make scroll feel fast and physical
+
+- Replace the rAF throttled scroll with **Lenis** smooth-scroll for buttery 60fps inertia
+- Drive all 3D transforms (bot position, rotation, camera Z, fog density) directly from Lenis progress with **spring damping** — feels reactive but never jittery
+- Scroll velocity feeds two things:
+  - Propeller RPM (faster scroll = faster spin + speed-line particles trailing the bot)
+  - Camera dolly intensity (subtle FOV punch on fast scroll)
+- Bot tilts forward/back based on scroll direction like it's actually swimming with you
+
+## 4. Premium 3D extras beyond scroll
+
+- **Cursor parallax** on the hero bot — gentle tilt that follows the pointer
+- **Magnetic CTA buttons** that subtly pull toward the cursor
+- **Caustic light shader** projected on dark sections (animated GLSL noise)
+- **Scroll-triggered "depth meter"** in the side rail — shows "0m → 12m → 25m" as you descend the page, reinforcing the underwater journey
+- **Section transitions** with WebGL ripple distortion when entering each new section
+
+## Technical notes
+
+- Stack: `three`, `@react-three/fiber@^8.18`, `@react-three/drei@^9.122` (already installed) + add `@studio-freight/lenis` for smooth scroll and `maath` for damped spring lerps
+- The bot becomes a single reusable `<SwamnBot />` component used in 3 places (hero, sticky traveler, footer). One canvas per location, lazy-mounted with `IntersectionObserver` so off-screen canvases stop rendering — keeps perf strong
+- DPR clamped to `[1, 1.75]`; `frameloop="demand"` for the showcase canvas, `"always"` only while in view
+- `prefers-reduced-motion` falls back to a single static hero render of the bot — no scroll-driven motion
+- Mobile gets a lighter version: hero bot only, no sticky traveler, no caustic shader, half particle count
+
+## What you'll see scrolling top → bottom
+
+```text
+[Hero]          big rotating bot, parallax with cursor, propellers idling
+[Problem]       bot drifts in from left, fog tints darker
+[Architecture]  PINNED — bot rotates 360°, hotspot labels appear
+[Workflow]      bot follows a path tracing each workflow step
+[Performance]   bot speeds up, propeller blur, speed-lines
+[Algae]         green caustic tint, bubbles thicken
+[Team/CTA]      bot rises toward surface, light brightens
+[Footer]        bot descends into the deep, scene fades to navy-deep
+```
+
+## What I will not change
+
+- Copy, section order, fonts, color tokens, or any backend code
+- Existing cards' layouts and content
+- The chat assistant, forms, or routing
