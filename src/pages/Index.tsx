@@ -21,11 +21,12 @@ import { Footer } from "@/components/swamn/Footer";
 import { Chatbot } from "@/components/swamn/Chatbot";
 import { ScrollProgress } from "@/components/swamn/ScrollProgress";
 import { BackToTop } from "@/components/swamn/BackToTop";
+import { UnderwaterScene } from "@/components/swamn/UnderwaterScene";
 
 const Index = () => {
   useReveal();
   return (
-    <main className="min-h-screen bg-background">
+    <main className="relative min-h-screen bg-transparent">
       <Helmet>
         <title>SWAMN — Autonomous AI Cleanup for Rivers & Oceans</title>
         <meta name="description" content="SWAMN deploys autonomous AI bots and self-sealing pods to clean rivers, lakes and harbours continuously, 24/7." />
@@ -47,9 +48,11 @@ const Index = () => {
           ]
         })}</script>
       </Helmet>
-      <ScrollProgress />
-      <Nav />
-      <Hero />
+      <UnderwaterScene />
+      <div className="relative z-10">
+        <ScrollProgress />
+        <Nav />
+        <Hero />
       <Problem />
       <About />
       <Architecture />
@@ -65,9 +68,10 @@ const Index = () => {
       <Roadmap />
       <CTA />
       <FAQ />
-      <Footer />
-      <Chatbot />
-      <BackToTop />
+        <Footer />
+        <Chatbot />
+        <BackToTop />
+      </div>
     </main>
   );
 };
