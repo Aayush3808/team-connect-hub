@@ -68,9 +68,10 @@ const Index = () => {
       <Roadmap />
       <CTA />
       <FAQ />
-      <Footer />
-      <Chatbot />
-      <BackToTop />
+        <Footer />
+        <Chatbot />
+        <BackToTop />
+      </div>
     </main>
   );
 };
