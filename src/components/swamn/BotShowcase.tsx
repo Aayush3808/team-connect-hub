@@ -1,5 +1,5 @@
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Environment, ContactShadows } from "@react-three/drei";
+import { ContactShadows } from "@react-three/drei";
 import { Suspense, useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { SwamnBot } from "./SwamnBot";
@@ -97,7 +97,7 @@ export const BotShowcase = () => {
             <directionalLight position={[5, 8, 4]} intensity={1.6} color="#cfe8ff" castShadow shadow-mapSize={[1024, 1024]} />
             <pointLight position={[-5, -2, 3]} intensity={1.2} color="#22d3ee" />
             <pointLight position={[3, -3, -3]} intensity={0.5} color="#0ea5e9" />
-            <Environment preset="city" />
+            <hemisphereLight args={["#bce8ff", "#0a1a3a", 0.6]} />
             <ShowcaseBot sectionRef={sectionRef} />
             <ContactShadows position={[0, -1.4, 0]} opacity={0.5} scale={9} blur={2.6} far={3} color="#020617" />
           </Suspense>
