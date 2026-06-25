@@ -80,34 +80,15 @@ export const SwamnBot = ({ velocityRef, idleSpin = 0.15 }: Props) => {
           <meshStandardMaterial color={NAVY_DEEP} metalness={0.4} roughness={0.5} />
         </mesh>
 
-        {/* Embossed SWAMN wordmark — both sides */}
-        <Text
-          position={[0.05, -0.05, 0.92]}
-          fontSize={0.38}
-          letterSpacing={0.04}
-          font="https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_nVMrMxCp50ojIA2A.woff"
-          color={NAVY_DEEP}
-          anchorX="center"
-          anchorY="middle"
-          outlineWidth={0.012}
-          outlineColor="#3a4480"
-        >
-          SWAMN
-        </Text>
-        <Text
-          position={[0.05, -0.05, -0.92]}
-          rotation={[0, Math.PI, 0]}
-          fontSize={0.38}
-          letterSpacing={0.04}
-          font="https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_nVMrMxCp50ojIA2A.woff"
-          color={NAVY_DEEP}
-          anchorX="center"
-          anchorY="middle"
-          outlineWidth={0.012}
-          outlineColor="#3a4480"
-        >
-          SWAMN
-        </Text>
+        {/* Side accent stripes (replaces remote-font Text wordmark) */}
+        <mesh position={[0, -0.05, 0.91]}>
+          <boxGeometry args={[1.6, 0.18, 0.01]} />
+          <meshStandardMaterial color={NAVY_DEEP} metalness={0.5} roughness={0.35} />
+        </mesh>
+        <mesh position={[0, -0.05, -0.91]}>
+          <boxGeometry args={[1.6, 0.18, 0.01]} />
+          <meshStandardMaterial color={NAVY_DEEP} metalness={0.5} roughness={0.35} />
+        </mesh>
       </group>
 
       {/* ===== Antenna / sensor module on top ===== */}
