@@ -103,7 +103,7 @@ export const HeroBot = ({ className = "" }: { className?: string }) => {
           <pointLight position={[-4, -2, 3]} intensity={1.1} color="#22d3ee" />
           <pointLight position={[3, -3, -3]} intensity={0.6} color="#0ea5e9" />
 
-          <Environment preset="city" />
+          <hemisphereLight args={["#bce8ff", "#0a1a3a", 0.6]} />
 
           <PointerRig>
             <Float speed={1.4} rotationIntensity={0.25} floatIntensity={0.5}>
