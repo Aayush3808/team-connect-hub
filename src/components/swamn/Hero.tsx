@@ -46,8 +46,8 @@ export const Hero = () => {
           </div>
         </div>
 
-        {/* Centered logo + label */}
-        <div className="flex flex-col items-center text-center">
+        {/* Left-aligned logo + label */}
+        <div className="flex flex-col items-start text-left">
           <Logo size={92} withWordmark={false} />
           <div
             className="mt-3 text-[1.6rem] font-black tracking-[0.28em]"
@@ -60,8 +60,8 @@ export const Hero = () => {
           </div>
         </div>
 
-        {/* Big two-line hero headline */}
-        <div className="mx-auto mt-10 max-w-5xl text-center">
+        {/* Left-aligned two-line hero headline */}
+        <div className="mt-10 max-w-5xl text-left">
           <h1
             className="text-[2.4rem] leading-[1.05] sm:text-6xl md:text-[5.2rem] font-black tracking-tight"
             style={{ fontFamily: "Impact, 'Arial Black', system-ui, sans-serif" }}
@@ -81,13 +81,13 @@ export const Hero = () => {
           </h1>
 
           {/* dotted divider with circle */}
-          <div className="mt-8 flex items-center justify-center gap-3">
+          <div className="mt-8 flex items-center gap-3">
             <span className="h-px w-16 bg-slate-400/60" />
             <span className="h-3 w-3 rounded-full border border-slate-400/70" />
             <span className="h-px w-16 bg-slate-400/60" />
           </div>
 
-          <p className="mx-auto mt-6 max-w-xl text-base md:text-lg leading-relaxed text-slate-700">
+          <p className="mt-6 max-w-xl text-base md:text-lg leading-relaxed text-slate-700">
             Autonomous surface robots that detect, collect and remove floating
             plastic waste from our oceans.
           </p>
