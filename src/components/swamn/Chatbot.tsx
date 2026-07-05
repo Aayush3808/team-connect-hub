@@ -13,7 +13,7 @@ export const Chatbot = () => {
     {
       role: "assistant",
       content:
-        "Hi! I'm SS · Swamn Sphere 🌊 Ask me anything about our mission, team, or how to get involved.",
+        "Hi! I'm the SWAMN Assistant 🌊 Ask me anything about our mission, team, or how to get involved.",
     },
   ]);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -129,7 +129,7 @@ export const Chatbot = () => {
           <div className="flex items-center gap-3 border-b border-border bg-background/60 px-4 py-3">
             <span className="h-2 w-2 rounded-full bg-aqua" />
             <div>
-              <div className="h-display text-sm text-navy">SS · Swamn Sphere</div>
+              <div className="h-display text-sm text-navy">SWAMN Assistant</div>
               <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
                 AI · Ask anything
               </div>
@@ -175,7 +175,7 @@ export const Chatbot = () => {
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask Swamn Sphere…"
+              placeholder="Ask about SWAMN…"
               maxLength={500}
               className="flex-1 rounded-full border border-border bg-card px-4 py-2 text-sm text-navy outline-none focus:border-navy/40"
             />
