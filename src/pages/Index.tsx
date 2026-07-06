@@ -63,7 +63,7 @@ const Index = () => {
         <Problem />
         <About />
         <Architecture />
-        <BotShowcase />
+        
         <Workflow />
       <Performance />
       <Impact />
