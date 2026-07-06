@@ -1,5 +1,5 @@
 import { Logo } from "./Logo";
-import { HeroBot } from "./HeroBot";
+
 
 const features = [
   { label: "AI-Assisted Monitoring" },
@@ -93,10 +93,11 @@ export const Hero = () => {
           </p>
         </div>
 
-        {/* Bot stage with mission/vision callouts */}
+        {/* Bot stage — the persistent 3D bot floats over this area (see PersistentBot) */}
         <div className="relative mx-auto mt-10 max-w-6xl">
           <div className="relative">
-            <HeroBot className="h-[52vh] min-h-[420px] w-full md:h-[62vh]" />
+            {/* reserved space so layout matches the fixed 3D bot's hero pose */}
+            <div className="h-[52vh] min-h-[420px] w-full md:h-[62vh]" />
 
             {/* Mission callout — left */}
             <div className="pointer-events-none absolute left-0 top-1/2 hidden -translate-y-1/2 md:block max-w-[180px]">
