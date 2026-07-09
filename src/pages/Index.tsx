@@ -21,18 +21,11 @@ import { Footer } from "@/components/swamn/Footer";
 import { Chatbot } from "@/components/swamn/Chatbot";
 import { ScrollProgress } from "@/components/swamn/ScrollProgress";
 import { BackToTop } from "@/components/swamn/BackToTop";
-import { UnderwaterScene } from "@/components/swamn/UnderwaterScene";
-import { BotShowcase } from "@/components/swamn/BotShowcase";
-import { useEffect } from "react";
-import { initSmoothScroll } from "@/lib/scroll";
 
 const Index = () => {
   useReveal();
-  useEffect(() => {
-    initSmoothScroll();
-  }, []);
   return (
-    <main className="relative min-h-screen bg-transparent">
+    <main className="min-h-screen bg-background">
       <Helmet>
         <title>SWAMN — Autonomous AI Cleanup for Rivers & Oceans</title>
         <meta name="description" content="SWAMN deploys autonomous AI bots and self-sealing pods to clean rivers, lakes and harbours continuously, 24/7." />
@@ -54,16 +47,13 @@ const Index = () => {
           ]
         })}</script>
       </Helmet>
-      <UnderwaterScene />
-      <div className="relative z-10">
-        <ScrollProgress />
-        <Nav />
-        <Hero />
-        <Problem />
-        <About />
-        <Architecture />
-        <BotShowcase />
-        <Workflow />
+      <ScrollProgress />
+      <Nav />
+      <Hero />
+      <Problem />
+      <About />
+      <Architecture />
+      <Workflow />
       <Performance />
       <Impact />
       <Commercial />
@@ -75,10 +65,9 @@ const Index = () => {
       <Roadmap />
       <CTA />
       <FAQ />
-        <Footer />
-        <Chatbot />
-        <BackToTop />
-      </div>
+      <Footer />
+      <Chatbot />
+      <BackToTop />
     </main>
   );
 };

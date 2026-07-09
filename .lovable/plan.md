@@ -1,70 +1,59 @@
 
-# Make SWAMN feel like a real 3D premium site
+# Visual & Interaction Upgrades
 
-Right now the underwater scene sits behind a heavy readability veil, so the bot barely registers. The fix is three things: **bring 3D into the foreground in dedicated moments**, **rebuild the bot to match your real CAD**, and **make scroll feel instant and physical**.
+A focused polish pass — no new features, no backend, no content rewrites. Everything stays frontend.
 
-## 1. Rebuild the bot to match your model
+## 1. Hero — cinematic upgrade
+- Add an animated **water ripple / particles** layer behind the logo (MagicUI `Ripple` or `Particles` in aqua tones) instead of the current static blurred blobs.
+- Replace the static `<h1>` with **Word Rotate** on the accent word: "intelligent systems" → cycles "intelligent systems / autonomous fleets / circular cleanup".
+- Add a subtle **BorderBeam** around the hero ocean image card.
+- Stats row: count-up animation on numbers when they scroll into view, plus a soft hover lift.
 
-Procedurally model it from primitives in Three.js to match the renders you shared:
+## 2. Sticky scroll progress + section reveals
+- Thin aqua **scroll progress bar** fixed at the top under the nav.
+- Upgrade `useReveal` so cards stagger in with a slight scale + blur-out-to-in, not just a fade.
+- Smooth-scroll behavior tuned (already partly there) with a small offset for the sticky nav so anchor links don't hide headings.
 
-- Deep-navy rounded-rectangle hull (capsule + box), glossy clear-coat material (high metalness, low roughness, strong env reflections)
-- Embossed `SWAMN` wordmark on the side (extruded text geometry, same navy with rim light)
-- Top antenna module: small black housing + green LED cube + brass camera lens (emissive)
-- Two angled support struts going down from the hull
-- Two angled propeller pods at the bottom of the struts, with spinning 3-blade props (light blue tint, metallic)
-- Soft contact shadow plane and a subtle clear-coat highlight pass
+## 3. Navigation polish
+- Active section highlighting in the nav (current link gets the aqua dot + navy text as you scroll).
+- Add a proper **mobile menu** (currently hidden on mobile) — slide-down sheet with the same links + Join CTA.
+- Logo gets a tiny hover micro-interaction (slow rotate of the inner shape).
 
-## 2. Move 3D from background → foreground
+## 4. Team section — premium cards
+- Replace the flat initials gradient with a **MagicCard spotlight** effect (cursor-follow glow) on each member card.
+- Add a hover state that reveals a small "Contact" pill for members with emails, and slides the bio up slightly.
+- Tighten grid so 5+ members balance better on lg (3 cols stays, but last row centers).
 
-Replace the always-on fullscreen veil with a hybrid:
+## 5. Workflow / Methodology — connected timeline
+- Turn the 6 "Stage" cards into a **vertical timeline on desktop** with a thin aqua connector line and animated dot that fills as you scroll.
+- On mobile, keep stacked cards but add the connector.
 
-- **Hero**: large floating bot center-stage, slowly rotating, with parallax tilt on cursor. Replaces the current static ocean image card.
-- **Between sections**: bot becomes a pinned "swimmer" that traverses the page. Uses `position: sticky` + scroll progress so it overtakes you as you read, then hands off to the next section.
-- **Architecture / Workflow section**: pinned scroll sequence — bot rotates 360°, hotspots fade in pointing to hull / antenna / propellers / boom with labels. This is the "wow" moment.
-- **Footer**: bot descends into deep water, lights dim, bubbles trail upward.
+## 6. Architecture / About — depth + motion
+- About section's "2025 Prototype" disc gets a slow rotating ring + the inner gradient gently animates (already drifts; add a second counter-rotating layer).
+- Add **AnimatedBeam**-style connectors between the three units (Aggregation → Pod → Retrieval) in the Architecture section to visually express the fleet relationship.
 
-The fullscreen underwater canvas stays, but only as a thin atmospheric layer (caustics + bubbles) behind transparent section gaps — not behind every card. Readability is preserved because real content cards keep their solid surfaces.
+## 7. FAQ — smoother accordion
+- Use shadcn Accordion (already installed) instead of whatever's there now, with a soft chevron rotate and content fade.
 
-## 3. Make scroll feel fast and physical
+## 8. Chatbot polish
+- Add a small **pulse ring** on the closed chat button to draw attention on first load (auto-dismisses after first open).
+- Smoother open/close (scale + fade from the button origin).
+- Typing dots indicator instead of "Thinking…" text.
 
-- Replace the rAF throttled scroll with **Lenis** smooth-scroll for buttery 60fps inertia
-- Drive all 3D transforms (bot position, rotation, camera Z, fog density) directly from Lenis progress with **spring damping** — feels reactive but never jittery
-- Scroll velocity feeds two things:
-  - Propeller RPM (faster scroll = faster spin + speed-line particles trailing the bot)
-  - Camera dolly intensity (subtle FOV punch on fast scroll)
-- Bot tilts forward/back based on scroll direction like it's actually swimming with you
+## 9. CTA + Footer
+- CTA section: add a soft animated gradient mesh background behind the heading.
+- Footer: add subtle hover underlines (`story-link`) on links, and a small "Back to top" floating button that appears after 800px scroll.
 
-## 4. Premium 3D extras beyond scroll
-
-- **Cursor parallax** on the hero bot — gentle tilt that follows the pointer
-- **Magnetic CTA buttons** that subtly pull toward the cursor
-- **Caustic light shader** projected on dark sections (animated GLSL noise)
-- **Scroll-triggered "depth meter"** in the side rail — shows "0m → 12m → 25m" as you descend the page, reinforcing the underwater journey
-- **Section transitions** with WebGL ripple distortion when entering each new section
+## 10. Global micro-polish
+- Image lazy-loading + `decoding="async"` on every `<img>` for perceived speed.
+- Reduced-motion respect: wrap heavy animations in `prefers-reduced-motion: no-preference` so accessibility isn't broken.
+- Consistent focus rings (aqua outline) on all interactive elements for keyboard users.
 
 ## Technical notes
+- New dependency: **MagicUI components** (Ripple, BorderBeam, MagicCard, AnimatedBeam, WordRotate) — installed individually per their docs, no extra runtime.
+- No changes to `Index.tsx` section order, no content edits, no backend, no SEO changes.
+- All animations gated behind `prefers-reduced-motion`.
 
-- Stack: `three`, `@react-three/fiber@^8.18`, `@react-three/drei@^9.122` (already installed) + add `@studio-freight/lenis` for smooth scroll and `maath` for damped spring lerps
-- The bot becomes a single reusable `<SwamnBot />` component used in 3 places (hero, sticky traveler, footer). One canvas per location, lazy-mounted with `IntersectionObserver` so off-screen canvases stop rendering — keeps perf strong
-- DPR clamped to `[1, 1.75]`; `frameloop="demand"` for the showcase canvas, `"always"` only while in view
-- `prefers-reduced-motion` falls back to a single static hero render of the bot — no scroll-driven motion
-- Mobile gets a lighter version: hero bot only, no sticky traveler, no caustic shader, half particle count
+---
 
-## What you'll see scrolling top → bottom
-
-```text
-[Hero]          big rotating bot, parallax with cursor, propellers idling
-[Problem]       bot drifts in from left, fog tints darker
-[Architecture]  PINNED — bot rotates 360°, hotspot labels appear
-[Workflow]      bot follows a path tracing each workflow step
-[Performance]   bot speeds up, propeller blur, speed-lines
-[Algae]         green caustic tint, bubbles thicken
-[Team/CTA]      bot rises toward surface, light brightens
-[Footer]        bot descends into the deep, scene fades to navy-deep
-```
-
-## What I will not change
-
-- Copy, section order, fonts, color tokens, or any backend code
-- Existing cards' layouts and content
-- The chat assistant, forms, or routing
+Want me to do **all 10**, or pick the top 3–4 you care about most? (If you say "go", I'll do everything.)
