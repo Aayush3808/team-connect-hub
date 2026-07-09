@@ -3,6 +3,14 @@ import { SectionHeader } from "./SectionHeader";
 
 const team = [
   {
+    name: "Aviraaj",
+    role: "Business Evaluator",
+    sub: "Strategy & Viability",
+    desc: "Leads market analysis, viability assessment, and strategic positioning — connecting SWAMN's engineering to real-world impact.",
+    initials: "AV",
+    email: "",
+  },
+  {
     name: "Rishi Singh",
     role: "Lead Innovator",
     sub: "Bot & Dock Designer",

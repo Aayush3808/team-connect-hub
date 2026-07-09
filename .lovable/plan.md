@@ -1,59 +1,70 @@
-## Plan
 
-### 1. Remove Aviraaj from Team
-- Edit `src/components/swamn/Team.tsx` — delete the first entry (`Aviraaj — Business Evaluator`) from the `team` array. Grid layout already adapts (sm:2 / lg:3 cols), so 6 members render cleanly.
+# Make SWAMN feel like a real 3D premium site
 
-### 2. Persistent scroll-driven 3D bot
-Right now `HeroBot` only lives inside the Hero section, so it scrolls away. `BotShowcase` is a separate scene lower down. I'll unify these into one **fixed, always-on-screen bot** that reacts to scroll.
+Right now the underwater scene sits behind a heavy readability veil, so the bot barely registers. The fix is three things: **bring 3D into the foreground in dedicated moments**, **rebuild the bot to match your real CAD**, and **make scroll feel instant and physical**.
 
-- Create `src/components/swamn/PersistentBot.tsx`:
-  - A `position: fixed` full-viewport `<Canvas>` layer (right side on desktop, behind content on mobile), `pointer-events-none`, `z-index` above `UnderwaterScene` but below text/nav.
-  - Reads `scrollState.progress` inside `useFrame` (no re-renders) and drives:
-    - **Position**: bot travels along a scripted path across the screen (e.g. right → center → left → right) as progress goes 0→1.
-    - **Rotation**: continuous yaw + scroll-velocity-boosted spin (already partially wired via `velocityRef`).
-    - **Scale**: subtle pulse at section boundaries (0.15, 0.35, 0.6, 0.85 progress marks).
-    - **Camera dolly**: small z push/pull tied to progress for parallax depth.
-  - Cursor parallax (reuse `PointerRig`).
-- Mount `<PersistentBot />` once in `src/pages/Index.tsx`, directly after `<UnderwaterScene />`.
-- Remove the in-hero `<HeroBot />` render and the `<BotShowcase />` section (or keep BotShowcase as a "spotlight" moment where the persistent bot's target path pauses — simpler: remove both, since the persistent bot replaces them).
+## 1. Rebuild the bot to match your model
 
-### 3. More Three.js interactivity across the site
-Add lightweight, section-anchored 3D touches so the site feels genuinely built on three.js, not just a background:
+Procedurally model it from primitives in Three.js to match the renders you shared:
 
-- **UnderwaterScene upgrades** (`src/components/swamn/UnderwaterScene.tsx`):
-  - Increase caustics/light intensity and speed with `scrollState.velocity`.
-  - Add drifting bubble particles (instanced spheres) that stream faster on scroll.
-  - Add slow-moving debris silhouettes (plastic bottle / bag low-poly shapes) that the bot appears to "clean" — they fade out as scroll passes cleanup sections.
+- Deep-navy rounded-rectangle hull (capsule + box), glossy clear-coat material (high metalness, low roughness, strong env reflections)
+- Embossed `SWAMN` wordmark on the side (extruded text geometry, same navy with rim light)
+- Top antenna module: small black housing + green LED cube + brass camera lens (emissive)
+- Two angled support struts going down from the hull
+- Two angled propeller pods at the bottom of the struts, with spinning 3-blade props (light blue tint, metallic)
+- Soft contact shadow plane and a subtle clear-coat highlight pass
 
-- **Section-anchor interactions**:
-  - **Architecture / Workflow sections**: add small inline `<Canvas>` mini-scenes showing a rotating pod / retrieval bot the user can drag to orbit (via drei `OrbitControls` with `enableZoom={false}`).
-  - **Performance section**: a 3D bar chart made of extruded meshes that grow in on scroll enter.
+## 2. Move 3D from background → foreground
 
-- **Cursor-reactive hero**: mouse-following light in the hero Canvas so highlights track the pointer.
+Replace the always-on fullscreen veil with a hybrid:
 
-- **Scroll-linked bot animation timeline** (in `PersistentBot`):
-  ```
-  progress  0.00 → hero: bot right side, large, facing camera
-  progress  0.20 → problem: bot drifts left, tilts down at "waste"
-  progress  0.40 → about/architecture: bot centers, slow orbit
-  progress  0.60 → workflow: bot moves right, props spin fast
-  progress  0.80 → team/roadmap: bot pulls back small, top-right
-  progress  1.00 → footer: bot exits upward
-  ```
-  Interpolate with `THREE.MathUtils.lerp` on each frame.
+- **Hero**: large floating bot center-stage, slowly rotating, with parallax tilt on cursor. Replaces the current static ocean image card.
+- **Between sections**: bot becomes a pinned "swimmer" that traverses the page. Uses `position: sticky` + scroll progress so it overtakes you as you read, then hands off to the next section.
+- **Architecture / Workflow section**: pinned scroll sequence — bot rotates 360°, hotspots fade in pointing to hull / antenna / propellers / boom with labels. This is the "wow" moment.
+- **Footer**: bot descends into deep water, lights dim, bubbles trail upward.
 
-### 4. Technical notes
-- Keep existing `initSmoothScroll` (Lenis) — the persistent bot reads `scrollState.progress` which Lenis already updates.
-- All new Three code stays on `@react-three/fiber@^8.18` + `@react-three/drei@^9.122.0` (already installed).
-- No new dependencies required.
-- Bot layer `pointer-events-none` so it never blocks buttons; enable pointer-events only on the small draggable orbit widgets.
-- Respect `prefers-reduced-motion` — fall back to a static bot pose.
+The fullscreen underwater canvas stays, but only as a thin atmospheric layer (caustics + bubbles) behind transparent section gaps — not behind every card. Readability is preserved because real content cards keep their solid surfaces.
 
-### Files touched
-- `src/components/swamn/Team.tsx` — remove Aviraaj
-- `src/components/swamn/PersistentBot.tsx` — **new**, fixed scroll-driven bot layer
-- `src/pages/Index.tsx` — mount PersistentBot, remove BotShowcase
-- `src/components/swamn/Hero.tsx` — remove inline HeroBot (bot now global)
-- `src/components/swamn/UnderwaterScene.tsx` — add bubbles + debris + scroll-reactive caustics
-- `src/components/swamn/Architecture.tsx` + `Workflow.tsx` — add small draggable 3D widgets
-- `src/components/swamn/Performance.tsx` — add 3D bar chart
+## 3. Make scroll feel fast and physical
+
+- Replace the rAF throttled scroll with **Lenis** smooth-scroll for buttery 60fps inertia
+- Drive all 3D transforms (bot position, rotation, camera Z, fog density) directly from Lenis progress with **spring damping** — feels reactive but never jittery
+- Scroll velocity feeds two things:
+  - Propeller RPM (faster scroll = faster spin + speed-line particles trailing the bot)
+  - Camera dolly intensity (subtle FOV punch on fast scroll)
+- Bot tilts forward/back based on scroll direction like it's actually swimming with you
+
+## 4. Premium 3D extras beyond scroll
+
+- **Cursor parallax** on the hero bot — gentle tilt that follows the pointer
+- **Magnetic CTA buttons** that subtly pull toward the cursor
+- **Caustic light shader** projected on dark sections (animated GLSL noise)
+- **Scroll-triggered "depth meter"** in the side rail — shows "0m → 12m → 25m" as you descend the page, reinforcing the underwater journey
+- **Section transitions** with WebGL ripple distortion when entering each new section
+
+## Technical notes
+
+- Stack: `three`, `@react-three/fiber@^8.18`, `@react-three/drei@^9.122` (already installed) + add `@studio-freight/lenis` for smooth scroll and `maath` for damped spring lerps
+- The bot becomes a single reusable `<SwamnBot />` component used in 3 places (hero, sticky traveler, footer). One canvas per location, lazy-mounted with `IntersectionObserver` so off-screen canvases stop rendering — keeps perf strong
+- DPR clamped to `[1, 1.75]`; `frameloop="demand"` for the showcase canvas, `"always"` only while in view
+- `prefers-reduced-motion` falls back to a single static hero render of the bot — no scroll-driven motion
+- Mobile gets a lighter version: hero bot only, no sticky traveler, no caustic shader, half particle count
+
+## What you'll see scrolling top → bottom
+
+```text
+[Hero]          big rotating bot, parallax with cursor, propellers idling
+[Problem]       bot drifts in from left, fog tints darker
+[Architecture]  PINNED — bot rotates 360°, hotspot labels appear
+[Workflow]      bot follows a path tracing each workflow step
+[Performance]   bot speeds up, propeller blur, speed-lines
+[Algae]         green caustic tint, bubbles thicken
+[Team/CTA]      bot rises toward surface, light brightens
+[Footer]        bot descends into the deep, scene fades to navy-deep
+```
+
+## What I will not change
+
+- Copy, section order, fonts, color tokens, or any backend code
+- Existing cards' layouts and content
+- The chat assistant, forms, or routing

@@ -22,7 +22,7 @@ import { Chatbot } from "@/components/swamn/Chatbot";
 import { ScrollProgress } from "@/components/swamn/ScrollProgress";
 import { BackToTop } from "@/components/swamn/BackToTop";
 import { UnderwaterScene } from "@/components/swamn/UnderwaterScene";
-import { PersistentBot } from "@/components/swamn/PersistentBot";
+import { BotShowcase } from "@/components/swamn/BotShowcase";
 import { useEffect } from "react";
 import { initSmoothScroll } from "@/lib/scroll";
 
@@ -55,7 +55,6 @@ const Index = () => {
         })}</script>
       </Helmet>
       <UnderwaterScene />
-      <PersistentBot />
       <div className="relative z-10">
         <ScrollProgress />
         <Nav />
@@ -63,7 +62,7 @@ const Index = () => {
         <Problem />
         <About />
         <Architecture />
-        
+        <BotShowcase />
         <Workflow />
       <Performance />
       <Impact />
