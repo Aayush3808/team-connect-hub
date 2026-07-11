@@ -34,26 +34,8 @@ export const About = () => (
           </div>
         </div>
 
-        <div className="reveal relative">
-          <div className="relative aspect-square overflow-hidden rounded-[2rem] border border-border/70 bg-aqua shadow-card">
-            <div aria-hidden className="absolute inset-0 opacity-90"
-                 style={{ background: "var(--gradient-aqua)" }} />
-            <div aria-hidden className="absolute inset-0 animate-drift opacity-40"
-                 style={{ background: "radial-gradient(40% 50% at 30% 30%, hsl(0 0% 100%/0.5), transparent)" }} />
-            <div className="absolute inset-0 flex items-center justify-center p-10">
-              <div className="text-center">
-                <div className="h-display text-7xl text-primary-foreground md:text-8xl">2025</div>
-                <div className="mt-3 text-sm uppercase tracking-[0.32em] text-primary-foreground/80">
-                  Prototype demonstrated
-                </div>
-                <div className="mx-auto mt-6 h-px w-24 bg-primary-foreground/40" />
-                <p className="mx-auto mt-6 max-w-xs text-sm leading-relaxed text-primary-foreground/90">
-                  Built end-to-end by a self-driven team of student innovators.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div aria-hidden className="absolute -bottom-6 -right-6 -z-10 h-32 w-32 rounded-full bg-aqua opacity-40 blur-3xl" />
+        <div aria-hidden className="reveal relative hidden lg:block">
+          <div className="absolute -bottom-6 -right-6 h-32 w-32 rounded-full bg-aqua opacity-40 blur-3xl" />
         </div>
       </div>
     </div>
