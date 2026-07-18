@@ -1,19 +1,25 @@
 import { useEffect, useRef, useState, FormEvent } from "react";
 import ReactMarkdown from "react-markdown";
+import { WeddingCelebration } from "./WeddingCelebration";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat`;
+const SECRET_CODE = "290209";
 
 export const Chatbot = () => {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [awaitingCode, setAwaitingCode] = useState(false);
+  const [attemptsLeft, setAttemptsLeft] = useState(3);
+  const [locked, setLocked] = useState(false);
+  const [showWedding, setShowWedding] = useState(false);
   const [messages, setMessages] = useState<Msg[]>([
     {
       role: "assistant",
       content:
-        "Hi! I'm the SWAMN Assistant 🌊 Ask me anything about our mission, team, or how to get involved.",
+        "Hi! I'm **Swamn Sphere** (SS) 🌊 Ask me anything about our mission, team, or how to get involved.",
     },
   ]);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -25,6 +31,9 @@ export const Chatbot = () => {
     });
   }, [messages, open]);
 
+  const pushAssistant = (content: string) =>
+    setMessages((p) => [...p, { role: "assistant", content }]);
+
   const send = async (e: FormEvent) => {
     e.preventDefault();
     const text = input.trim();
@@ -34,6 +43,43 @@ export const Chatbot = () => {
     const next = [...messages, userMsg];
     setMessages(next);
     setInput("");
+
+    // Secret movie-style flow
+    if (locked) {
+      pushAssistant("🔒 Access permanently locked for this session.");
+      return;
+    }
+
+    if (awaitingCode) {
+      if (text === SECRET_CODE) {
+        setAwaitingCode(false);
+        setAttemptsLeft(3);
+        pushAssistant("✅ Code accepted. Opening the celebration… 💍💖");
+        setTimeout(() => setShowWedding(true), 600);
+        return;
+      }
+      const remaining = attemptsLeft - 1;
+      setAttemptsLeft(remaining);
+      if (remaining <= 0) {
+        setLocked(true);
+        setAwaitingCode(false);
+        pushAssistant("❌ Wrong code. No attempts remaining. Access locked.");
+      } else {
+        pushAssistant(
+          `❌ Wrong code. **${remaining} attempt${remaining === 1 ? "" : "s"} remaining.** Try again:`
+        );
+      }
+      return;
+    }
+
+    if (text.toUpperCase() === "SS") {
+      setAwaitingCode(true);
+      pushAssistant(
+        `🎬 You've discovered a secret. Enter the secret code to unlock the surprise.\n\nYou have **${attemptsLeft} attempts**.`
+      );
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -129,7 +175,7 @@ export const Chatbot = () => {
           <div className="flex items-center gap-3 border-b border-border bg-background/60 px-4 py-3">
             <span className="h-2 w-2 rounded-full bg-aqua" />
             <div>
-              <div className="h-display text-sm text-navy">SWAMN Assistant</div>
+              <div className="h-display text-sm text-navy">Swamn Sphere · SS</div>
               <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
                 AI · Ask anything
               </div>
@@ -175,8 +221,9 @@ export const Chatbot = () => {
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask about SWAMN…"
+              placeholder={awaitingCode ? "Enter secret code…" : "Ask Swamn Sphere…"}
               maxLength={500}
+              type={awaitingCode ? "password" : "text"}
               className="flex-1 rounded-full border border-border bg-card px-4 py-2 text-sm text-navy outline-none focus:border-navy/40"
             />
             <button
@@ -189,6 +236,8 @@ export const Chatbot = () => {
           </form>
         </div>
       )}
+
+      {showWedding && <WeddingCelebration onClose={() => setShowWedding(false)} />}
     </>
   );
 };
