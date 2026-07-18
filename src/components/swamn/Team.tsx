@@ -4,6 +4,7 @@ import rishiPhoto from "@/assets/team/Rishi.jpeg.asset.json";
 import mananPhoto from "@/assets/team/Manan.jpeg.asset.json";
 import annapurnaPhoto from "@/assets/team/Annapurna.jpeg.asset.json";
 import adarshPhoto from "@/assets/team/Adarsh.jpeg.asset.json";
+import vaibhavPhoto from "@/assets/team/Vaibhav.jpeg.asset.json";
 
 const team = [
   {
@@ -22,6 +23,7 @@ const team = [
     desc: "Shapes SWAMN's visual identity, social presence, and digital communications — building a strong, premium identity for the initiative.",
     initials: "VR",
     email: "",
+    photo: vaibhavPhoto.url,
   },
   {
     name: "Aayush Kumar Singh",
