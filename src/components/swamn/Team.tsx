@@ -1,5 +1,9 @@
 import { MouseEvent } from "react";
 import { SectionHeader } from "./SectionHeader";
+import rishiPhoto from "@/assets/team/Rishi.jpeg.asset.json";
+import mananPhoto from "@/assets/team/Manan.jpeg.asset.json";
+import annapurnaPhoto from "@/assets/team/Annapurna.jpeg.asset.json";
+import adarshPhoto from "@/assets/team/Adarsh.jpeg.asset.json";
 
 const team = [
   {
@@ -9,6 +13,7 @@ const team = [
     desc: "Leads the technical vision of SWAMN — designs the autonomous bot and docking model, and drives AI, embedded systems, and end-to-end engineering.",
     initials: "RS",
     email: "rishisingh@swamn.com",
+    photo: rishiPhoto.url,
   },
   {
     name: "Vaibhav Raj",
