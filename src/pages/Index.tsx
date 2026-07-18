@@ -14,6 +14,7 @@ import { Challenges } from "@/components/swamn/Challenges";
 import { FutureScope } from "@/components/swamn/FutureScope";
 import { Achievements } from "@/components/swamn/Achievements";
 import { Team } from "@/components/swamn/Team";
+import { Gallery } from "@/components/swamn/Gallery";
 import { Roadmap } from "@/components/swamn/Roadmap";
 import { CTA } from "@/components/swamn/CTA";
 import { FAQ } from "@/components/swamn/FAQ";
