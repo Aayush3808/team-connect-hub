@@ -23,6 +23,7 @@ const team = [
     desc: "Shapes SWAMN's visual identity, social presence, and digital communications — building a strong, premium identity for the initiative.",
     initials: "VR",
     email: "",
+    photo: vaibhavPhoto.url,
   },
   {
     name: "Aayush Kumar Singh",
