@@ -63,6 +63,7 @@ const Index = () => {
       <FutureScope />
       <Achievements />
       <Team />
+      <Gallery />
       <Roadmap />
       <CTA />
       <FAQ />
