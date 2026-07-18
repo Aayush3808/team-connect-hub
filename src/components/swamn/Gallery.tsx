@@ -9,7 +9,7 @@ import img7 from "@/assets/gallery/7.25.00.jpeg.asset.json";
 import img8 from "@/assets/gallery/7.25.00_1.jpeg.asset.json";
 
 const shots = [
-  { src: img2.url, caption: "Adarsh sampling contaminated river water at the ghat" },
+  { src: img2.url, caption: "Rishi sampling contaminated river water at the ghat" },
   { src: img3.url, caption: "Rishi & Adarsh on-site during prototype field testing" },
   { src: img1.url, caption: "Field water testing — evaluating pollutant load" },
   { src: img8.url, caption: "Manan collecting a surface water sample near the boats" },

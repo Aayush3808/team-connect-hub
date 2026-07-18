@@ -1,5 +1,9 @@
 import { MouseEvent } from "react";
 import { SectionHeader } from "./SectionHeader";
+import rishiPhoto from "@/assets/team/Rishi.jpeg.asset.json";
+import mananPhoto from "@/assets/team/Manan.jpeg.asset.json";
+import annapurnaPhoto from "@/assets/team/Annapurna.jpeg.asset.json";
+import adarshPhoto from "@/assets/team/Adarsh.jpeg.asset.json";
 
 const team = [
   {
@@ -9,6 +13,7 @@ const team = [
     desc: "Leads the technical vision of SWAMN — designs the autonomous bot and docking model, and drives AI, embedded systems, and end-to-end engineering.",
     initials: "RS",
     email: "rishisingh@swamn.com",
+    photo: rishiPhoto.url,
   },
   {
     name: "Vaibhav Raj",
@@ -33,6 +38,7 @@ const team = [
     desc: "Oversees budgeting, resource planning, and the financial stewardship that keeps SWAMN's development sustainable and accountable.",
     initials: "MN",
     email: "",
+    photo: mananPhoto.url,
   },
   {
     name: "Satvik",
@@ -49,6 +55,7 @@ const team = [
     desc: "Leads people operations at SWAMN — onboarding, team coordination, and culture. Keeps the team aligned, motivated, and moving in sync, ensuring every member has the clarity and support they need to do their best work.",
     initials: "AN",
     email: "",
+    photo: annapurnaPhoto.url,
   },
   {
     name: "Adarsh Kumar",
@@ -57,6 +64,7 @@ const team = [
     desc: "Supports people operations at SWAMN — helping onboard new members, coordinate team activities, and maintain a healthy, collaborative culture. Acts as a bridge across roles to keep everyone aligned and engaged.",
     initials: "AK",
     email: "",
+    photo: adarshPhoto.url,
   },
 ];
 
@@ -87,9 +95,19 @@ export const Team = () => (
               <div aria-hidden className="absolute inset-0 bg-aqua opacity-90" style={{ background: "var(--gradient-aqua)" }} />
               <div aria-hidden className="absolute inset-0 animate-drift opacity-30"
                    style={{ background: "radial-gradient(50% 50% at 30% 30%, hsl(0 0% 100%/0.6), transparent)" }} />
-              <div className="absolute inset-0 flex items-center justify-center transition-transform duration-500 group-hover:scale-105">
-                <div className="h-display text-7xl text-primary-foreground/90">{m.initials}</div>
-              </div>
+              {m.photo ? (
+                <img
+                  src={m.photo}
+                  alt={`${m.name} — ${m.role}`}
+                  loading="lazy"
+                  decoding="async"
+                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+              ) : (
+                <div className="absolute inset-0 flex items-center justify-center transition-transform duration-500 group-hover:scale-105">
+                  <div className="h-display text-7xl text-primary-foreground/90">{m.initials}</div>
+                </div>
+              )}
               <div className="absolute inset-x-0 bottom-0 p-5 transition-transform duration-500 group-hover:-translate-y-1">
                 <div className="rounded-xl glass p-4">
                   <div className="h-display text-lg text-navy">{m.name}</div>
