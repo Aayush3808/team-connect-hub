@@ -38,6 +38,7 @@ const team = [
     desc: "Oversees budgeting, resource planning, and the financial stewardship that keeps SWAMN's development sustainable and accountable.",
     initials: "MN",
     email: "",
+    photo: mananPhoto.url,
   },
   {
     name: "Satvik",
@@ -54,6 +55,7 @@ const team = [
     desc: "Leads people operations at SWAMN — onboarding, team coordination, and culture. Keeps the team aligned, motivated, and moving in sync, ensuring every member has the clarity and support they need to do their best work.",
     initials: "AN",
     email: "",
+    photo: annapurnaPhoto.url,
   },
   {
     name: "Adarsh Kumar",
@@ -62,6 +64,7 @@ const team = [
     desc: "Supports people operations at SWAMN — helping onboard new members, coordinate team activities, and maintain a healthy, collaborative culture. Acts as a bridge across roles to keep everyone aligned and engaged.",
     initials: "AK",
     email: "",
+    photo: adarshPhoto.url,
   },
 ];
 
