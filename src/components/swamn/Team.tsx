@@ -95,9 +95,19 @@ export const Team = () => (
               <div aria-hidden className="absolute inset-0 bg-aqua opacity-90" style={{ background: "var(--gradient-aqua)" }} />
               <div aria-hidden className="absolute inset-0 animate-drift opacity-30"
                    style={{ background: "radial-gradient(50% 50% at 30% 30%, hsl(0 0% 100%/0.6), transparent)" }} />
-              <div className="absolute inset-0 flex items-center justify-center transition-transform duration-500 group-hover:scale-105">
-                <div className="h-display text-7xl text-primary-foreground/90">{m.initials}</div>
-              </div>
+              {m.photo ? (
+                <img
+                  src={m.photo}
+                  alt={`${m.name} — ${m.role}`}
+                  loading="lazy"
+                  decoding="async"
+                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+              ) : (
+                <div className="absolute inset-0 flex items-center justify-center transition-transform duration-500 group-hover:scale-105">
+                  <div className="h-display text-7xl text-primary-foreground/90">{m.initials}</div>
+                </div>
+              )}
               <div className="absolute inset-x-0 bottom-0 p-5 transition-transform duration-500 group-hover:-translate-y-1">
                 <div className="rounded-xl glass p-4">
                   <div className="h-display text-lg text-navy">{m.name}</div>
