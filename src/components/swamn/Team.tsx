@@ -98,12 +98,11 @@ export const Team = () => (
               <div aria-hidden className="absolute inset-0 animate-drift opacity-30"
                    style={{ background: "radial-gradient(50% 50% at 30% 30%, hsl(0 0% 100%/0.6), transparent)" }} />
               {m.photo ? (
-                <img
-                  src={m.photo}
-                  alt={`${m.name} — ${m.role}`}
-                  loading="lazy"
-                  decoding="async"
-                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                <div
+                  role="img"
+                  aria-label={`${m.name} — ${m.role}`}
+                  className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+                  style={{ backgroundImage: `url("${m.photo}")` }}
                 />
               ) : (
                 <div className="absolute inset-0 flex items-center justify-center transition-transform duration-500 group-hover:scale-105">
