@@ -1,10 +1,5 @@
 import { MouseEvent } from "react";
 import { SectionHeader } from "./SectionHeader";
-import rishiPhoto from "@/assets/team/Rishi.jpeg.asset.json";
-import mananPhoto from "@/assets/team/Manan.jpeg.asset.json";
-import annapurnaPhoto from "@/assets/team/Annapurna.jpeg.asset.json";
-import adarshPhoto from "@/assets/team/Adarsh.jpeg.asset.json";
-import vaibhavPhoto from "@/assets/team/Vaibhav.jpeg.asset.json";
 
 const team = [
   {
@@ -14,7 +9,7 @@ const team = [
     desc: "Leads the technical vision of SWAMN — designs the autonomous bot and docking model, and drives AI, embedded systems, and end-to-end engineering.",
     initials: "RS",
     email: "rishisingh@swamn.com",
-    photo: rishiPhoto.url,
+    photo: "/images/team/Rishi.jpeg",
   },
   {
     name: "Vaibhav Raj",
@@ -23,7 +18,7 @@ const team = [
     desc: "Shapes SWAMN's visual identity, social presence, and digital communications — building a strong, premium identity for the initiative.",
     initials: "VR",
     email: "",
-    photo: vaibhavPhoto.url,
+    photo: "/images/team/Vaibhav.jpeg",
   },
   {
     name: "Aayush Kumar Singh",
@@ -40,7 +35,7 @@ const team = [
     desc: "Oversees budgeting, resource planning, and the financial stewardship that keeps SWAMN's development sustainable and accountable.",
     initials: "MN",
     email: "",
-    photo: mananPhoto.url,
+    photo: "/images/team/Manan.jpeg",
   },
   {
     name: "Satvik",
@@ -57,7 +52,7 @@ const team = [
     desc: "Leads people operations at SWAMN — onboarding, team coordination, and culture. Keeps the team aligned, motivated, and moving in sync, ensuring every member has the clarity and support they need to do their best work.",
     initials: "AN",
     email: "",
-    photo: annapurnaPhoto.url,
+    photo: "/images/team/Annapurna.jpeg",
   },
   {
     name: "Adarsh Kumar",
@@ -66,7 +61,7 @@ const team = [
     desc: "Supports people operations at SWAMN — helping onboard new members, coordinate team activities, and maintain a healthy, collaborative culture. Acts as a bridge across roles to keep everyone aligned and engaged.",
     initials: "AK",
     email: "",
-    photo: adarshPhoto.url,
+    photo: "/images/team/Adarsh.jpeg",
   },
 ];
 
