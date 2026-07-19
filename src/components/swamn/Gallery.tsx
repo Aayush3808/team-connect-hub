@@ -1,22 +1,14 @@
 import { SectionHeader } from "./SectionHeader";
-import img1 from "@/assets/gallery/7.24.54.jpeg.asset.json";
-import img2 from "@/assets/gallery/7.24.55.jpeg.asset.json";
-import img3 from "@/assets/gallery/7.24.56.jpeg.asset.json";
-import img4 from "@/assets/gallery/7.24.57.jpeg.asset.json";
-import img5 from "@/assets/gallery/7.24.58.jpeg.asset.json";
-import img6 from "@/assets/gallery/7.24.58_1.jpeg.asset.json";
-import img7 from "@/assets/gallery/7.25.00.jpeg.asset.json";
-import img8 from "@/assets/gallery/7.25.00_1.jpeg.asset.json";
 
 const shots = [
-  { src: img2.url, caption: "Rishi sampling contaminated river water at the ghat" },
-  { src: img3.url, caption: "Rishi & Adarsh on-site during prototype field testing" },
-  { src: img1.url, caption: "Field water testing — evaluating pollutant load" },
-  { src: img8.url, caption: "Manan collecting a surface water sample near the boats" },
-  { src: img7.url, caption: "Debris and dumped waste along the riverbank" },
-  { src: img6.url, caption: "Documenting shoreline waste for aggregation planning" },
-  { src: img5.url, caption: "Boat-side survey — mapping floating waste hotspots" },
-  { src: img4.url, caption: "Close-up: plastic, organic waste and hyacinth on the surface" },
+  { src: "/images/gallery/7.24.55.jpeg", caption: "Rishi sampling contaminated river water at the ghat" },
+  { src: "/images/gallery/7.24.56.jpeg", caption: "Rishi & Adarsh on-site during prototype field testing" },
+  { src: "/images/gallery/7.24.54.jpeg", caption: "Field water testing — evaluating pollutant load" },
+  { src: "/images/gallery/7.25.00_1.jpeg", caption: "Manan collecting a surface water sample near the boats" },
+  { src: "/images/gallery/7.25.00.jpeg", caption: "Debris and dumped waste along the riverbank" },
+  { src: "/images/gallery/7.24.58_1.jpeg", caption: "Documenting shoreline waste for aggregation planning" },
+  { src: "/images/gallery/7.24.58.jpeg", caption: "Boat-side survey — mapping floating waste hotspots" },
+  { src: "/images/gallery/7.24.57.jpeg", caption: "Close-up: plastic, organic waste and hyacinth on the surface" },
 ];
 
 export const Gallery = () => (
