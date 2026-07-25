@@ -1,6 +1,10 @@
+import { lazy, Suspense } from "react";
 import { Logo } from "./Logo";
 import { WordRotate } from "./WordRotate";
-import heroOcean from "@/assets/hero-ocean.jpg";
+
+const HeroScene = lazy(() =>
+  import("@/three/HeroScene").then((m) => ({ default: m.HeroScene }))
+);
 
 const stats = [
   { v: "Autonomous", l: "Self-navigating operation" },
@@ -8,6 +12,7 @@ const stats = [
   { v: "Solar-Powered", l: "Sustainable energy" },
   { v: "Modular", l: "Scalable by design" },
 ];
+
 
 export const Hero = () => {
   return (
