@@ -79,20 +79,28 @@ export const Hero = () => {
           </div>
         </div>
 
-        {/* Hero ocean visual with animated border beam */}
+        {/* Interactive 3D hero scene — SWAMN bot on animated ocean */}
         <div className="relative mx-auto mt-20 max-w-6xl animate-fade-up" style={{ animationDelay: "240ms" }}>
           <div className="border-beam relative overflow-hidden rounded-[2rem] border border-border/70 shadow-card">
-            <img
-              src={heroOcean}
-              alt="Calm open ocean at sunrise"
-              width={1920}
-              height={1280}
-              loading="lazy"
-              decoding="async"
-              className="h-[42vh] min-h-[320px] w-full object-cover md:h-[58vh]"
-            />
-            <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/10 to-transparent" />
+            <div className="relative h-[52vh] min-h-[380px] w-full bg-navy-deep md:h-[64vh]">
+              <Suspense
+                fallback={
+                  <div className="flex h-full w-full items-center justify-center bg-gradient-to-b from-[#020817] via-[#062042] to-[#0a4a7a]">
+                    <div className="text-xs uppercase tracking-[0.3em] text-aqua/70">
+                      Booting SWAMN 3D…
+                    </div>
+                  </div>
+                }
+              >
+                <HeroScene />
+              </Suspense>
+              <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-background to-transparent" />
+              <div aria-hidden className="pointer-events-none absolute left-4 top-4 rounded-full border border-aqua/30 bg-navy-deep/40 px-3 py-1 text-[10px] uppercase tracking-[0.25em] text-aqua backdrop-blur">
+                ● Live 3D · ASB Prototype
+              </div>
+            </div>
           </div>
+
 
           {/* Stats — overlap card */}
           <div className="relative mx-auto -mt-16 grid max-w-5xl grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border/70 bg-border/70 shadow-card md:grid-cols-4">
