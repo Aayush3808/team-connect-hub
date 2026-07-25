@@ -64,8 +64,9 @@ export const Commercial = () => (
           Where SWAMN stands against the field
         </h3>
 
-        <div className="mt-10 overflow-hidden rounded-2xl border border-border bg-card">
-          <div className="grid grid-cols-4 gap-px bg-border text-sm">
+        {/* Desktop / tablet: grid table with horizontal scroll fallback */}
+        <div className="mt-10 hidden overflow-x-auto rounded-2xl border border-border bg-card md:block">
+          <div className="grid min-w-[720px] grid-cols-4 gap-px bg-border text-sm">
             <div className="bg-card p-4 text-[0.7rem] uppercase tracking-[0.18em] text-muted-foreground">Criterion</div>
             <div className="bg-card p-4 text-[0.7rem] uppercase tracking-[0.18em] text-muted-foreground">The Ocean Cleanup</div>
             <div className="bg-card p-4 text-[0.7rem] uppercase tracking-[0.18em] text-muted-foreground">WasteShark</div>
@@ -79,6 +80,31 @@ export const Commercial = () => (
               </div>
             ))}
           </div>
+        </div>
+
+        {/* Mobile: stacked per-criterion cards — no cramped 4-col squeeze */}
+        <div className="mt-10 space-y-4 md:hidden">
+          {compare.map((row) => (
+            <div key={row.c} className="overflow-hidden rounded-2xl border border-border bg-card">
+              <div className="bg-navy px-5 py-3 text-[0.7rem] uppercase tracking-[0.18em] text-aqua">
+                {row.c}
+              </div>
+              <dl className="divide-y divide-border text-sm">
+                <div className="flex items-start justify-between gap-4 px-5 py-3">
+                  <dt className="text-[0.7rem] uppercase tracking-[0.14em] text-muted-foreground">The Ocean Cleanup</dt>
+                  <dd className="text-right text-muted-foreground">{row.a}</dd>
+                </div>
+                <div className="flex items-start justify-between gap-4 px-5 py-3">
+                  <dt className="text-[0.7rem] uppercase tracking-[0.14em] text-muted-foreground">WasteShark</dt>
+                  <dd className="text-right text-muted-foreground">{row.b}</dd>
+                </div>
+                <div className="flex items-start justify-between gap-4 bg-secondary/40 px-5 py-3">
+                  <dt className="text-[0.7rem] uppercase tracking-[0.14em] text-aqua">SWAMN</dt>
+                  <dd className="text-right font-medium text-navy">{row.s}</dd>
+                </div>
+              </dl>
+            </div>
+          ))}
         </div>
       </div>
     </div>
