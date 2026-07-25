@@ -80,6 +80,15 @@ export const Chatbot = () => {
       return;
     }
 
+    // Block code / dev requests locally to save API credits
+    const codePattern = /\b(code|snippet|script|program|function|component|html|css|javascript|typescript|python|java|c\+\+|sql|regex|api|debug|compile|algorithm|write me (a|an|some)|build me (a|an)|generate (a|an)? ?(code|script|program))\b|```/i;
+    if (codePattern.test(text)) {
+      pushAssistant(
+        "I'm here to answer questions about **SWAMN** — our mission, team, technology, and how to get involved. I can't write or debug code. Try asking about our bots, dock, roadmap, or how to partner with us! 🌊"
+      );
+      return;
+    }
+
     setLoading(true);
 
     try {
