@@ -1,74 +1,59 @@
-## Goal
-Transform the SWAMN site into a trending, fully-3D interactive experience using **React + Vite + Three.js** (react-three-fiber + drei + postprocessing), featuring an **AI-generated GLB model** of the ASB bot, with scroll-driven 3D moments across the whole site.
 
-> Note on Next.js: Lovable runs on React + Vite. Next.js can't be previewed here — but the visual/interaction outcome (Three.js, scroll-driven 3D, cinematic hero) is fully achievable and often smoother in Vite. Confirmed with you above.
+# Visual & Interaction Upgrades
 
-## Visual direction (chosen for SWAMN)
-**"Deep Ocean Cinematic"** — dark navy → abyss gradient background, volumetric light shafts, realistic animated water, floating particulate/plastic debris, glass-morphism UI cards, cyan accent glow. This best matches SWAMN's ocean-cleanup identity and reads as premium/trending in 2026 (think Apple Vision Pro product pages, Ocean Cleanup site, Rivian).
+A focused polish pass — no new features, no backend, no content rewrites. Everything stays frontend.
 
-## Build phases
+## 1. Hero — cinematic upgrade
+- Add an animated **water ripple / particles** layer behind the logo (MagicUI `Ripple` or `Particles` in aqua tones) instead of the current static blurred blobs.
+- Replace the static `<h1>` with **Word Rotate** on the accent word: "intelligent systems" → cycles "intelligent systems / autonomous fleets / circular cleanup".
+- Add a subtle **BorderBeam** around the hero ocean image card.
+- Stats row: count-up animation on numbers when they scroll into view, plus a soft hover lift.
 
-### Phase 1 — 3D foundation
-- Install: `three`, `@react-three/fiber@^8.18`, `@react-three/drei@^9.122`, `@react-three/postprocessing`, `three-stdlib`, `maath`, `leva` (dev only)
-- Global `<Canvas>` layer with:
-  - Animated water shader (drei `MeshReflectorMaterial` + custom wave displacement)
-  - Depth fog, HDRI environment (studio ocean)
-  - Volumetric god-rays and bloom (postprocessing)
-  - Floating plastic debris particles (instanced meshes)
-- Lazy-load 3D (Suspense + fallback poster) so first paint stays fast
+## 2. Sticky scroll progress + section reveals
+- Thin aqua **scroll progress bar** fixed at the top under the nav.
+- Upgrade `useReveal` so cards stagger in with a slight scale + blur-out-to-in, not just a fade.
+- Smooth-scroll behavior tuned (already partly there) with a small offset for the sticky nav so anchor links don't hide headings.
 
-### Phase 2 — Generate the SWAMN bot
-- Use Replicate (via connector) with a text→3D model such as `firtoz/trellis` or `ndreca/hunyuan3d-2` to generate a `.glb` of the ASB bot from a detailed prompt (catamaran-hull surface bot, solar panel top, mesh collection net, camera mast, aqua-lit accents)
-- Optimize with `gltf-transform` (draco compression), save as `src/assets/models/swamn-bot.glb.asset.json`
-- Load via drei `useGLTF`, wrap with idle bob + subtle rotation
-- **Fallback:** if the generation quality is unusable, I'll model a stylized bot in code from primitives so the site still ships
+## 3. Navigation polish
+- Active section highlighting in the nav (current link gets the aqua dot + navy text as you scroll).
+- Add a proper **mobile menu** (currently hidden on mobile) — slide-down sheet with the same links + Join CTA.
+- Logo gets a tiny hover micro-interaction (slow rotate of the inner shape).
 
-### Phase 3 — Scroll-driven 3D scenes
-Rebuild sections with `<ScrollControls>` + `useScroll` sequencing:
-- **Hero** — Bot floats on water at center, camera slowly orbits, tagline fades in on glass panel
-- **Technology** — Camera dollies underwater, bot's underside highlighted, exploded-view labels on parts (net, sensors, solar, propulsion)
-- **Architecture** — 3D dock station rises from water, bot docks into it, data lines pulse to a floating cloud node
-- **Roadmap** — Camera pulls back to reveal Earth with cyan bloom points marking Phase 1→4 deployments
-- **Team, Gallery, FAQ, Footer** — Keep current 2D content but layered over the persistent 3D background with glass cards
+## 4. Team section — premium cards
+- Replace the flat initials gradient with a **MagicCard spotlight** effect (cursor-follow glow) on each member card.
+- Add a hover state that reveals a small "Contact" pill for members with emails, and slides the bio up slightly.
+- Tighten grid so 5+ members balance better on lg (3 cols stays, but last row centers).
 
-### Phase 4 — Interactivity & polish
-- Cursor magnetism on the bot; click → cinematic zoom + spec sheet overlay
-- Section-anchored camera keyframes (GSAP or drei `CameraShake` + `useFrame` lerps)
-- Reduced-motion fallback: static hero render + normal scroll
-- Mobile: lower DPR, disable postprocessing, single hero 3D scene only
-- Performance targets: <2.5s LCP on desktop, 60fps on M1/mid Android, bundle-split 3D so non-3D routes stay light
+## 5. Workflow / Methodology — connected timeline
+- Turn the 6 "Stage" cards into a **vertical timeline on desktop** with a thin aqua connector line and animated dot that fills as you scroll.
+- On mobile, keep stacked cards but add the connector.
 
-### Phase 5 — Preserve existing work
-- Keep: Chatbot (Swamn Sphere), wedding easter egg, Team photos, Gallery, SEO/meta, sitemap, Cloud auth, chat edge function, security fixes
-- Migrate all sections progressively so nothing goes offline during rebuild
+## 6. Architecture / About — depth + motion
+- About section's "2025 Prototype" disc gets a slow rotating ring + the inner gradient gently animates (already drifts; add a second counter-rotating layer).
+- Add **AnimatedBeam**-style connectors between the three units (Aggregation → Pod → Retrieval) in the Architecture section to visually express the fleet relationship.
 
-## Technical details
-```text
-src/
-  three/
-    Scene.tsx              # global R3F Canvas
-    Ocean.tsx              # animated water surface
-    Bot.tsx                # loads swamn-bot.glb, animates
-    Dock.tsx               # docking station model
-    Debris.tsx             # instanced particles
-    Effects.tsx            # bloom + god rays + DoF
-    ScrollRig.tsx          # scroll → camera keyframes
-  assets/models/
-    swamn-bot.glb.asset.json
-  components/swamn/
-    (existing 2D sections refactored to sit over Scene)
-```
+## 7. FAQ — smoother accordion
+- Use shadcn Accordion (already installed) instead of whatever's there now, with a soft chevron rotate and content fade.
 
-## Estimated scope
-Large multi-turn build. I'll ship in this order so you can preview progress:
-1. 3D foundation + hero (visible impact immediately)
-2. Bot model generation + integration
-3. Scroll scenes for Technology / Architecture / Roadmap
-4. Interactivity, mobile perf, polish
+## 8. Chatbot polish
+- Add a small **pulse ring** on the closed chat button to draw attention on first load (auto-dismisses after first open).
+- Smoother open/close (scale + fade from the button origin).
+- Typing dots indicator instead of "Thinking…" text.
 
-## Trade-offs to know
-- **Bundle size:** three.js + models add ~400–700KB gzip. Mitigated via code-splitting and Draco.
-- **Replicate credit:** 3D model generation costs Replicate credits (a few cents). You'll need the Replicate connector linked — I'll prompt for it when we get to Phase 2.
-- **Older devices:** Full postprocessing stack can drop framerate on low-end mobiles → auto-degrade path included.
+## 9. CTA + Footer
+- CTA section: add a soft animated gradient mesh background behind the heading.
+- Footer: add subtle hover underlines (`story-link`) on links, and a small "Back to top" floating button that appears after 800px scroll.
 
-Approve and I'll start with Phase 1 (foundation + hero) so you see the new look immediately.
+## 10. Global micro-polish
+- Image lazy-loading + `decoding="async"` on every `<img>` for perceived speed.
+- Reduced-motion respect: wrap heavy animations in `prefers-reduced-motion: no-preference` so accessibility isn't broken.
+- Consistent focus rings (aqua outline) on all interactive elements for keyboard users.
+
+## Technical notes
+- New dependency: **MagicUI components** (Ripple, BorderBeam, MagicCard, AnimatedBeam, WordRotate) — installed individually per their docs, no extra runtime.
+- No changes to `Index.tsx` section order, no content edits, no backend, no SEO changes.
+- All animations gated behind `prefers-reduced-motion`.
+
+---
+
+Want me to do **all 10**, or pick the top 3–4 you care about most? (If you say "go", I'll do everything.)
