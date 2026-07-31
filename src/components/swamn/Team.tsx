@@ -30,9 +30,9 @@ const team = [
   },
   {
     name: "Manan",
-    role: "Finance Manager",
-    sub: "Budget & Resources",
-    desc: "Oversees budgeting, resource planning, and the financial stewardship that keeps SWAMN's development sustainable and accountable.",
+    role: "Branding, Media & Communications",
+    sub: "Identity & Outreach",
+    desc: "Shapes SWAMN's visual identity, social presence, and digital communications — building a strong, premium identity for the initiative.",
     initials: "MN",
     email: "",
     photo: "/images/team/Manan.jpeg",
