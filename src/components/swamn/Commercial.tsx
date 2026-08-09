@@ -17,7 +17,7 @@ const compare = [
   { c: "Primary Environment", a: "Open ocean gyres", b: "Harbours, marinas", s: "Rivers, lakes, harbours, flood zones" },
   { c: "Collection", a: "Passive boom + tow vessels", b: "Onboard conveyor & bin", s: "U-shaped boom + sealed pods" },
   { c: "Waste Storage", a: "Onboard; offload trip needed", b: "Onboard bin (~500 L)", s: "Floating pods — no shore trip" },
-  { c: "Continuous Operation", a: "Vessel return cycle", b: "Limited by bin capacity", s: "24-hour pod-release model" },
+  { c: "Continuous Operation", a: "Vessel return cycle", b: "Limited by bin capacity", s: "12-hour pod-release model" },
   { c: "Cost per Unit", a: "Multi-million USD", b: "€24k–40k", s: "₹50k–1.3 Lakh per bot" },
   { c: "Scalability", a: "Centralised, low", b: "Independent units", s: "Swarm architecture, modular" },
   { c: "Developing-World Fit", a: "Not designed for it", b: "Cost still high", s: "Core design goal" },

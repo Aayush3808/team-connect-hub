@@ -13,7 +13,7 @@ const faqs = [
   },
   {
     q: "Why split the system into three units instead of one robot?",
-    a: "Role separation. The Aggregation Bot never carries waste, the Retrieval Bot is purpose-built for towing, and the pods need no power at all. This keeps each unit lean, dramatically lowers cost per tonne recovered, and enables true 24-hour operation.",
+    a: "Role separation. The Aggregation Bot never carries waste, the Retrieval Bot is purpose-built for towing, and the pods need no power at all. This keeps each unit lean, dramatically lowers cost per tonne recovered, and enables true 12-hour operation.",
   },
   {
     q: "How does the autonomous sealing work?",

@@ -30,7 +30,7 @@ export const Architecture = () => (
       <SectionHeader
         eyebrow="The Ecosystem"
         title={<>A three-component <span className="h-serif text-gradient">cleanup ecosystem</span></>}
-        description="SWAMN is not a single robot — it is a team. Detection, containment and transport are split across three specialised roles that work alongside each other, enabling continuous 24-hour operation without ever stopping to ferry waste back to shore."
+        description="SWAMN is not a single robot — it is a team. Detection, containment and transport are split across three specialised roles that work alongside each other, enabling continuous 12-hour operation without ever stopping to ferry waste back to shore."
       />
 
       <div className="mt-16 grid gap-6 md:grid-cols-3">
