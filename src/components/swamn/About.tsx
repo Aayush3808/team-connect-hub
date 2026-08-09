@@ -18,12 +18,12 @@ export const About = () => (
             specialised team of Aggregation Bots, self-sealing Containment Pods, and Retrieval
             Bots that work in coordination across rivers, harbours, urban lakes and
             flood-affected zones. Detection, containment and transport are split into separate
-            roles so each unit stays lean and the fleet can operate 24/7.
+            roles so each unit stays lean and the fleet can operate 12-hour shifts.
           </p>
           <div className="mt-8 grid grid-cols-3 gap-4 text-sm">
             {[
               ["Specialised", "Three-role fleet"],
-              ["Continuous", "24-hour operation"],
+              ["Continuous", "12-hour operation"],
               ["Circular", "Waste-to-worth chain"],
             ].map(([t, s]) => (
               <div key={t} className="card-premium p-4">
