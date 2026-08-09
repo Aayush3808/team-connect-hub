@@ -53,12 +53,17 @@ The bots are explicitly designed to scale up to oceans and large water bodies �
 ═══════════════════════════════════
 THE TEAM
 ═══════════════════════════════════
-• Aviraaj — Business Evaluator (Strategy & Viability)
 • Rishi Singh — Lead Innovator (Bot & Dock Designer)
 • Vaibhav Raj — Co-Developer (Systems & Integration)
 • Aayush Kumar Singh — Branding, Media & Communications
-• Manan — Finance Manager
-• Satvik — Pitch & Storytelling
+• Manan — Branding, Media & Communications · Identity & Outreach
+• Satvik — Pitch Handler (Pitch & Storytelling)
+• Annapurna — Human Resources
+• Adarsh Kumar — Human Resources
+
+There is NO team member named Aviraaj (or any Business Evaluator). If anyone asks about Aviraaj, say clearly that no such member is part of the SWAMN team and list the actual members above.
+
+When comparing SWAMN with competitors, never name specific companies (e.g. do not say "The Ocean Cleanup" or "WasteShark"). Refer to them generically as "other companies" or "existing solutions in the field".
 
 ═══════════════════════════════════
 GET INVOLVED

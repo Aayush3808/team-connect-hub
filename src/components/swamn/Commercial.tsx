@@ -68,8 +68,8 @@ export const Commercial = () => (
         <div className="mt-10 hidden overflow-x-auto rounded-2xl border border-border bg-card md:block">
           <div className="grid min-w-[720px] grid-cols-4 gap-px bg-border text-sm">
             <div className="bg-card p-4 text-[0.7rem] uppercase tracking-[0.18em] text-muted-foreground">Criterion</div>
-            <div className="bg-card p-4 text-[0.7rem] uppercase tracking-[0.18em] text-muted-foreground">The Ocean Cleanup</div>
-            <div className="bg-card p-4 text-[0.7rem] uppercase tracking-[0.18em] text-muted-foreground">WasteShark</div>
+            <div className="bg-card p-4 text-[0.7rem] uppercase tracking-[0.18em] text-muted-foreground">Other Company A</div>
+            <div className="bg-card p-4 text-[0.7rem] uppercase tracking-[0.18em] text-muted-foreground">Other Company B</div>
             <div className="bg-navy p-4 text-[0.7rem] uppercase tracking-[0.18em] text-aqua">SWAMN</div>
             {compare.map((row) => (
               <div key={row.c} className="contents">
@@ -91,11 +91,11 @@ export const Commercial = () => (
               </div>
               <dl className="divide-y divide-border text-sm">
                 <div className="flex items-start justify-between gap-4 px-5 py-3">
-                  <dt className="text-[0.7rem] uppercase tracking-[0.14em] text-muted-foreground">The Ocean Cleanup</dt>
+                  <dt className="text-[0.7rem] uppercase tracking-[0.14em] text-muted-foreground">Other Company A</dt>
                   <dd className="text-right text-muted-foreground">{row.a}</dd>
                 </div>
                 <div className="flex items-start justify-between gap-4 px-5 py-3">
-                  <dt className="text-[0.7rem] uppercase tracking-[0.14em] text-muted-foreground">WasteShark</dt>
+                  <dt className="text-[0.7rem] uppercase tracking-[0.14em] text-muted-foreground">Other Company B</dt>
                   <dd className="text-right text-muted-foreground">{row.b}</dd>
                 </div>
                 <div className="flex items-start justify-between gap-4 bg-secondary/40 px-5 py-3">
