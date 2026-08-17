@@ -9,6 +9,12 @@ const shots = [
   { src: "/images/gallery/7.24.58_1.jpeg", caption: "Documenting shoreline waste for aggregation planning" },
   { src: "/images/gallery/7.24.58.jpeg", caption: "Boat-side survey — mapping floating waste hotspots" },
   { src: "/images/gallery/7.24.57.jpeg", caption: "Close-up: plastic, organic waste and hyacinth on the surface" },
+  { src: "/images/gallery/first-test/IMG-20260816-WA0078.jpg", caption: "1st Testing of our prototype — carrying the unit to the water body" },
+  { src: "/images/gallery/first-test/IMG-20260816-WA0087.jpg", caption: "1st Testing of our prototype — rigging the tow line before launch" },
+  { src: "/images/gallery/first-test/IMG-20260816-WA0089.jpg", caption: "1st Testing of our prototype — wiring the control electronics and net" },
+  { src: "/images/gallery/first-test/IMG-20260816-WA0091.jpg", caption: "1st Testing of our prototype — final checks with our mentor on site" },
+  { src: "/images/gallery/first-test/IMG-20260816-WA0077.jpg", caption: "1st Testing of our prototype — local children gather around the launch" },
+  { src: "/images/gallery/first-test/IMG-20260816-WA0076.jpg", caption: "1st Testing of our prototype — the hull afloat on its first run" },
 ];
 
 export const Gallery = () => (
