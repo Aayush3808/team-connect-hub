@@ -54,15 +54,6 @@ const team = [
     email: "",
     photo: "/images/team/Annapurna.jpeg",
   },
-  {
-    name: "Adarsh Kumar",
-    role: "Human Resources",
-    sub: "People & Culture",
-    desc: "Supports people operations at SWAMN — helping onboard new members, coordinate team activities, and maintain a healthy, collaborative culture. Acts as a bridge across roles to keep everyone aligned and engaged.",
-    initials: "AK",
-    email: "",
-    photo: "/images/team/Adarsh.jpeg",
-  },
 ];
 
 const onMove = (e: MouseEvent<HTMLElement>) => {
