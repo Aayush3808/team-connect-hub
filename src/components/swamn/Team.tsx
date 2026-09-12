@@ -107,22 +107,26 @@ export const Team = () => (
               <div className="absolute inset-x-0 bottom-0 p-5 transition-transform duration-500 group-hover:-translate-y-1">
                 <div className="rounded-xl glass p-4">
                   <div className="h-display text-lg text-navy">{m.name}</div>
-                  <div className="text-xs text-muted-foreground">{m.role} · {m.sub}</div>
+                  {m.role && (
+                    <div className="text-xs text-muted-foreground">{m.sub ? `${m.role} · ${m.sub}` : m.role}</div>
+                  )}
                 </div>
               </div>
             </div>
-            <div className="p-7">
-              <p className="text-sm leading-relaxed text-muted-foreground">{m.desc}</p>
-              {m.email && (
-                <a
-                  href={`mailto:${m.email}`}
-                  className="story-link mt-5 inline-flex items-center gap-1.5 text-xs font-medium tracking-wide text-navy transition-colors hover:text-aqua"
-                >
-                  {m.email}
-                  <span aria-hidden>→</span>
-                </a>
-              )}
-            </div>
+            {(m.desc || m.email) && (
+              <div className="p-7">
+                {m.desc && <p className="text-sm leading-relaxed text-muted-foreground">{m.desc}</p>}
+                {m.email && (
+                  <a
+                    href={`mailto:${m.email}`}
+                    className="story-link mt-5 inline-flex items-center gap-1.5 text-xs font-medium tracking-wide text-navy transition-colors hover:text-aqua"
+                  >
+                    {m.email}
+                    <span aria-hidden>→</span>
+                  </a>
+                )}
+              </div>
+            )}
           </article>
         ))}
       </div>
