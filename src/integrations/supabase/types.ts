@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      activity_log: {
+        Row: {
+          created_at: string
+          detail: string | null
+          id: string
+          kind: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          detail?: string | null
+          id?: string
+          kind: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          detail?: string | null
+          id?: string
+          kind?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       announcements: {
         Row: {
           body: string
@@ -74,6 +98,96 @@ export type Database = {
           name?: string
           source?: string
           status?: string
+        }
+        Relationships: []
+      }
+      file_shares: {
+        Row: {
+          created_at: string
+          file_id: string
+          file_name: string
+          id: string
+          mime_type: string | null
+          owner_id: string
+          shared_with: string
+        }
+        Insert: {
+          created_at?: string
+          file_id: string
+          file_name: string
+          id?: string
+          mime_type?: string | null
+          owner_id: string
+          shared_with: string
+        }
+        Update: {
+          created_at?: string
+          file_id?: string
+          file_name?: string
+          id?: string
+          mime_type?: string | null
+          owner_id?: string
+          shared_with?: string
+        }
+        Relationships: []
+      }
+      leave_requests: {
+        Row: {
+          created_at: string
+          decided_by: string | null
+          end_date: string
+          id: string
+          reason: string | null
+          start_date: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          decided_by?: string | null
+          end_date: string
+          id?: string
+          reason?: string | null
+          start_date: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          decided_by?: string | null
+          end_date?: string
+          id?: string
+          reason?: string | null
+          start_date?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      meeting_notes: {
+        Row: {
+          body: string
+          created_at: string
+          created_by: string | null
+          id: string
+          meeting_date: string
+          title: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          meeting_date?: string
+          title: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          meeting_date?: string
+          title?: string
         }
         Relationships: []
       }
@@ -204,6 +318,7 @@ export type Database = {
         Row: {
           avatar_url: string | null
           created_at: string
+          designation: string | null
           display_name: string
           updated_at: string
           user_id: string
@@ -212,6 +327,7 @@ export type Database = {
         Insert: {
           avatar_url?: string | null
           created_at?: string
+          designation?: string | null
           display_name: string
           updated_at?: string
           user_id: string
@@ -220,6 +336,7 @@ export type Database = {
         Update: {
           avatar_url?: string | null
           created_at?: string
+          designation?: string | null
           display_name?: string
           updated_at?: string
           user_id?: string
