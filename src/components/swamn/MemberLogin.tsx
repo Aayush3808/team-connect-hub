@@ -8,23 +8,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 
-const memberNames: Record<string, string> = {
-  aayush: "Aayush Kumar Singh",
-  adarsh: "Adarsh Kumar",
-  annapurna: "Annapurna",
-  manan: "Manan",
-  rishi: "Rishi Singh",
-  satvik: "Satvik",
-  vaibhav: "Vaibhav Raj",
-};
-
-const toMemberEmail = (username: string) => `${username}@members.swamn.com`;
-
 export const MemberLogin = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -37,42 +26,54 @@ export const MemberLogin = () => {
     };
   }, [navigate]);
 
+  const normalized = username.trim().toLowerCase();
+  const validUsername = /^[a-z0-9._-]{3,40}$/.test(normalized);
+
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const normalizedUsername = username.trim().toLowerCase();
     setError("");
+    setNotice("");
 
-    if (!/^[a-z0-9._-]{3,40}$/.test(normalizedUsername)) {
+    if (!validUsername) {
       setError("Enter your assigned team username.");
       return;
     }
 
     setLoading(true);
-    const { data, error: signInError } = await supabase.auth.signInWithPassword({
-      email: toMemberEmail(normalizedUsername),
-      password,
+    const { data, error: functionError } = await supabase.functions.invoke("member-auth", {
+      body: { action: "login", username: normalized, password },
     });
 
-    if (signInError || !data.user) {
+    const session = (data as { session?: { access_token: string; refresh_token: string } } | null)?.session;
+    if (functionError || !session) {
       setError("That username or password is not recognised.");
       setLoading(false);
       return;
     }
 
-    const { error: profileError } = await supabase.from("profiles").upsert({
-      user_id: data.user.id,
-      username: normalizedUsername,
-      display_name: memberNames[normalizedUsername] ?? normalizedUsername,
-    });
-
-    if (profileError) {
-      await supabase.auth.signOut();
-      setError("Your account is active, but its member profile could not be opened.");
+    const { error: sessionError } = await supabase.auth.setSession(session);
+    if (sessionError) {
+      setError("Your account is active, but the session could not be opened.");
       setLoading(false);
       return;
     }
 
     navigate("/team/files", { replace: true });
+  };
+
+  const onReset = async () => {
+    setError("");
+    setNotice("");
+    if (!validUsername) {
+      setError("Enter your username first, then request a reset link.");
+      return;
+    }
+    setLoading(true);
+    await supabase.functions.invoke("member-auth", {
+      body: { action: "reset", username: normalized, redirectTo: `${window.location.origin}/team/reset-password` },
+    });
+    setNotice("If a recovery address is on file for that username, a reset link is on its way.");
+    setLoading(false);
   };
 
   return (
