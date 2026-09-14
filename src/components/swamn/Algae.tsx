@@ -19,13 +19,6 @@ const adaptations = [
   },
 ];
 
-const value = [
-  { k: "Cyanobacteria (blue-green algae)", v: "→ Biogas via anaerobic digestion · digestate as soil amendment", p: "₹4,000–8,000 / tonne" },
-  { k: "Green microalgae (Chlorella, Scenedesmus)", v: "→ Dried biomass animal feed · lipid extraction for biodiesel", p: "₹15,000–40,000 / tonne (dry)" },
-  { k: "Water hyacinth & macroalgae", v: "→ Vermicompost · paper / fibre board · bioplastic feedstock", p: "₹3,000–20,000 / tonne" },
-  { k: "Mixed bloom algae", v: "→ Phycoremediation of industrial wastewater · soil conditioner", p: "₹5,000–10,000 / tonne dry" },
-];
-
 const lakes = ["Dal Lake, Kashmir", "Hussain Sagar, Hyderabad", "Powai Lake, Mumbai", "Bellandur Lake, Bengaluru"];
 
 export const Algae = () => (
@@ -61,27 +54,6 @@ export const Algae = () => (
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{a.d}</p>
           </div>
         ))}
-      </div>
-
-      {/* Value chain */}
-      <div className="reveal mt-16">
-        <div className="text-center text-[0.7rem] uppercase tracking-[0.32em] text-muted-foreground">
-          Algae-to-Value Chain
-        </div>
-        <div className="mt-6 overflow-hidden rounded-2xl border border-border bg-card">
-          {value.map((v, i) => (
-            <div
-              key={v.k}
-              className={`grid gap-4 p-6 md:grid-cols-[1.1fr_2fr_0.9fr] md:items-center ${
-                i < value.length - 1 ? "border-b border-border" : ""
-              }`}
-            >
-              <div className="h-display text-base text-navy">{v.k}</div>
-              <div className="text-sm text-muted-foreground">{v.v}</div>
-              <div className="text-sm font-medium text-navy md:text-right">{v.p}</div>
-            </div>
-          ))}
-        </div>
       </div>
 
       {/* Safety note */}

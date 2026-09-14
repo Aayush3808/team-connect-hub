@@ -1,35 +1,18 @@
 import { SectionHeader } from "./SectionHeader";
 
 const costs = [
-  { label: "Aggregation Bot", scope: "River / Lake", v: "₹50k–60k", note: "Per unit at prototype scale" },
-  { label: "Aggregation Bot", scope: "Ocean Variant", v: "₹1.3 Lakh", note: "Ruggedised for open-water ops" },
+  { label: "Aggregation Bot", scope: "River / Lake", v: "₹60k–70k", note: "Per unit at prototype scale" },
+  { label: "Aggregation Bot", scope: "Ocean Variant", v: "₹2 Lakh", note: "Ruggedised for open-water ops" },
   { label: "Containment Pod", scope: "Passive Unit", v: "₹3k–5k", note: "No motor · No battery · Passive" },
-];
-
-const throughput = [
-  { v: "200–500 kg", l: "Waste collected per bot per day", s: "At low patrol speed · 10–12 hr ops" },
-  { v: "₹1,600–7,500", l: "PET revenue potential per bot per day", s: "At ₹8k–15k per tonne" },
-  { v: "1–2.5 tonnes", l: "Daily collection · 5-bot fleet", s: "Covering a 2 km river stretch" },
-  { v: "₹8,000–37,500", l: "Daily recoverable material value", s: "PET alone, before HDPE & organics" },
-];
-
-const compare = [
-  { c: "Primary Environment", a: "Open ocean gyres", b: "Harbours, marinas", s: "Rivers, lakes, harbours, flood zones" },
-  { c: "Collection", a: "Passive boom + tow vessels", b: "Onboard conveyor & bin", s: "U-shaped boom + sealed pods" },
-  { c: "Waste Storage", a: "Onboard; offload trip needed", b: "Onboard bin (~500 L)", s: "Floating pods — no shore trip" },
-  { c: "Continuous Operation", a: "Vessel return cycle", b: "Limited by bin capacity", s: "12-hour pod-release model" },
-  { c: "Cost per Unit", a: "Multi-million USD", b: "€24k–40k", s: "₹50k–1.3 Lakh per bot" },
-  { c: "Scalability", a: "Centralised, low", b: "Independent units", s: "Swarm architecture, modular" },
-  { c: "Developing-World Fit", a: "Not designed for it", b: "Cost still high", s: "Core design goal" },
 ];
 
 export const Commercial = () => (
   <section id="commercial" className="relative bg-soft py-28 md:py-36">
     <div className="container">
       <SectionHeader
-        eyebrow="Commercial Viability"
-        title={<>Built to actually <span className="h-serif text-gradient">pay for itself</span></>}
-        description="Environmental projects fail for two reasons: they run out of money, or nobody wants to pay for them. SWAMN is engineered with both problems in mind — role separation drops unit cost, and what comes out of the water funds keeping it clean."
+        eyebrow="Unit Economics"
+        title={<>What each unit <span className="h-serif text-gradient">actually costs</span></>}
+        description="Role separation keeps every unit lean — the pods need no power at all, which is where most of the cost savings come from."
       />
 
       {/* Cost cards */}
@@ -44,69 +27,6 @@ export const Commercial = () => (
         ))}
       </div>
 
-      {/* Throughput */}
-      <div className="reveal mt-12 grid gap-px overflow-hidden rounded-2xl border border-border bg-border md:grid-cols-2 lg:grid-cols-4">
-        {throughput.map((t) => (
-          <div key={t.l} className="bg-card p-7">
-            <div className="h-display text-2xl text-navy">{t.v}</div>
-            <div className="mt-2 text-sm text-navy/80">{t.l}</div>
-            <div className="mt-1 text-xs text-muted-foreground">{t.s}</div>
-          </div>
-        ))}
-      </div>
-
-      {/* Competitive Landscape */}
-      <div className="reveal mt-20">
-        <div className="text-center text-[0.7rem] uppercase tracking-[0.32em] text-muted-foreground">
-          Competitive Landscape
-        </div>
-        <h3 className="mt-4 text-center h-display text-2xl text-navy md:text-3xl">
-          Where SWAMN stands against the field
-        </h3>
-
-        {/* Desktop / tablet: grid table with horizontal scroll fallback */}
-        <div className="mt-10 hidden overflow-x-auto rounded-2xl border border-border bg-card md:block">
-          <div className="grid min-w-[720px] grid-cols-4 gap-px bg-border text-sm">
-            <div className="bg-card p-4 text-[0.7rem] uppercase tracking-[0.18em] text-muted-foreground">Criterion</div>
-            <div className="bg-card p-4 text-[0.7rem] uppercase tracking-[0.18em] text-muted-foreground">Other Company A</div>
-            <div className="bg-card p-4 text-[0.7rem] uppercase tracking-[0.18em] text-muted-foreground">Other Company B</div>
-            <div className="bg-navy p-4 text-[0.7rem] uppercase tracking-[0.18em] text-aqua">SWAMN</div>
-            {compare.map((row) => (
-              <div key={row.c} className="contents">
-                <div className="bg-card p-4 text-navy/90">{row.c}</div>
-                <div className="bg-card p-4 text-muted-foreground">{row.a}</div>
-                <div className="bg-card p-4 text-muted-foreground">{row.b}</div>
-                <div className="bg-card p-4 text-navy font-medium">{row.s}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Mobile: stacked per-criterion cards — no cramped 4-col squeeze */}
-        <div className="mt-10 space-y-4 md:hidden">
-          {compare.map((row) => (
-            <div key={row.c} className="overflow-hidden rounded-2xl border border-border bg-card">
-              <div className="bg-navy px-5 py-3 text-[0.7rem] uppercase tracking-[0.18em] text-aqua">
-                {row.c}
-              </div>
-              <dl className="divide-y divide-border text-sm">
-                <div className="flex items-start justify-between gap-4 px-5 py-3">
-                  <dt className="text-[0.7rem] uppercase tracking-[0.14em] text-muted-foreground">Other Company A</dt>
-                  <dd className="text-right text-muted-foreground">{row.a}</dd>
-                </div>
-                <div className="flex items-start justify-between gap-4 px-5 py-3">
-                  <dt className="text-[0.7rem] uppercase tracking-[0.14em] text-muted-foreground">Other Company B</dt>
-                  <dd className="text-right text-muted-foreground">{row.b}</dd>
-                </div>
-                <div className="flex items-start justify-between gap-4 bg-secondary/40 px-5 py-3">
-                  <dt className="text-[0.7rem] uppercase tracking-[0.14em] text-aqua">SWAMN</dt>
-                  <dd className="text-right font-medium text-navy">{row.s}</dd>
-                </div>
-              </dl>
-            </div>
-          ))}
-        </div>
-      </div>
     </div>
   </section>
 );
