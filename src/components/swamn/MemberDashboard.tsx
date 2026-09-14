@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 
 type Attendance = { id: string; day: string; status: string };
-type Task = { id: string; title: string; status: string; due_date: string | null };
+type Task = { id: string; title: string; status: string; due_date: string | null; details: string | null; assigned_by: string | null };
 type Announcement = { id: string; title: string; body: string; created_at: string };
 
 const CHART_COLORS = ["hsl(var(--primary))", "#38bdf8", "#0ea5e9", "#94a3b8", "#cbd5f5"];
@@ -32,7 +32,21 @@ const fileGroup = (name: string, mimeType: string) => {
   return "Documents";
 };
 
-export const MemberDashboard = ({ files }: { files: { name: string; mimeType: string; size?: string }[] }) => {
+const monthGrid = () => {
+  const now = new Date();
+  const first = new Date(now.getFullYear(), now.getMonth(), 1);
+  const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+  const cells: { key: string; label: number | null }[] = [];
+  for (let index = 0; index < first.getDay(); index += 1) cells.push({ key: `pad-${index}`, label: null });
+  for (let day = 1; day <= daysInMonth; day += 1) {
+    const date = new Date(now.getFullYear(), now.getMonth(), day);
+    const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+    cells.push({ key, label: day });
+  }
+  return { cells, monthLabel: now.toLocaleDateString(undefined, { month: "long", year: "numeric" }) };
+};
+
+export const MemberDashboard = ({ files, refreshKey = 0 }: { files: { name: string; mimeType: string; size?: string }[]; refreshKey?: number }) => {
   const [userId, setUserId] = useState<string | null>(null);
   const [attendance, setAttendance] = useState<Attendance[]>([]);
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -46,10 +60,12 @@ export const MemberDashboard = ({ files }: { files: { name: string; mimeType: st
     setUserId(id);
     if (!id) return;
 
-    const since = lastDays(30)[0];
+    const now = new Date();
+    const monthStart = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-01`;
+    const since = [lastDays(30)[0], monthStart].sort()[0];
     const [attendanceResult, tasksResult, announcementsResult] = await Promise.all([
       supabase.from("member_attendance").select("id, day, status").eq("user_id", id).gte("day", since).order("day"),
-      supabase.from("member_tasks").select("id, title, status, due_date").eq("user_id", id).order("created_at", { ascending: false }),
+      supabase.from("member_tasks").select("id, title, status, due_date, details, assigned_by").eq("user_id", id).order("created_at", { ascending: false }),
       supabase.from("announcements").select("id, title, body, created_at").order("created_at", { ascending: false }).limit(5),
     ]);
 
@@ -58,7 +74,7 @@ export const MemberDashboard = ({ files }: { files: { name: string; mimeType: st
     setAnnouncements((announcementsResult.data ?? []) as Announcement[]);
   }, []);
 
-  useEffect(() => { void load(); }, [load]);
+  useEffect(() => { void load(); }, [load, refreshKey]);
 
   const days = useMemo(() => lastDays(14), []);
   const attendanceMap = useMemo(() => new Map(attendance.map((entry) => [entry.day, entry.status])), [attendance]);
@@ -82,6 +98,8 @@ export const MemberDashboard = ({ files }: { files: { name: string; mimeType: st
   }, [files]);
 
   const totalBytes = files.reduce((sum, file) => sum + (Number(file.size) || 0), 0);
+
+  const month = useMemo(() => monthGrid(), []);
 
   const checkIn = async (status: "present" | "remote") => {
     if (!userId) return;
@@ -187,6 +205,34 @@ export const MemberDashboard = ({ files }: { files: { name: string; mimeType: st
         </div>
       </div>
 
+      <div className="rounded-2xl border border-border bg-card p-6">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h2 className="font-medium text-navy">Monthly tracker</h2>
+          <span className="text-xs text-muted-foreground">{month.monthLabel}</span>
+        </div>
+        <div className="mt-4 grid grid-cols-7 gap-1.5 text-center text-[0.65rem] text-muted-foreground">
+          {["S", "M", "T", "W", "T", "F", "S"].map((label, index) => <span key={`${label}-${index}`}>{label}</span>)}
+        </div>
+        <div className="mt-1.5 grid grid-cols-7 gap-1.5">
+          {month.cells.map((cell) => {
+            if (cell.label === null) return <span key={cell.key} />;
+            const status = attendanceMap.get(cell.key);
+            const isToday = cell.key === todayKey();
+            const tone = status === "present" ? "bg-primary text-primary-foreground" : status === "remote" ? "bg-secondary text-navy" : "bg-muted/40 text-muted-foreground";
+            return (
+              <span key={cell.key} title={`${cell.key} · ${status ?? "no check-in"}`} className={`flex aspect-square items-center justify-center rounded-lg text-xs ${tone} ${isToday ? "ring-2 ring-aqua" : ""}`}>
+                {cell.label}
+              </span>
+            );
+          })}
+        </div>
+        <div className="mt-3 flex flex-wrap gap-4 text-xs text-muted-foreground">
+          <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-primary" /> Present</span>
+          <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-secondary" /> Remote</span>
+          <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-muted" /> No check-in</span>
+        </div>
+      </div>
+
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="rounded-2xl border border-border bg-card p-6">
           <h2 className="font-medium text-navy">Your tasks</h2>
@@ -197,12 +243,19 @@ export const MemberDashboard = ({ files }: { files: { name: string; mimeType: st
           <ul className="mt-4 divide-y divide-border">
             {tasks.length === 0 && <li className="py-6 text-sm text-muted-foreground">No tasks yet. Add your first one above.</li>}
             {tasks.map((task) => (
-              <li key={task.id} className="flex items-center gap-3 py-3">
-                <button type="button" onClick={() => void toggleTask(task)} aria-label={`Toggle ${task.title}`} className="text-aqua">
+              <li key={task.id} className="flex items-start gap-3 py-3">
+                <button type="button" onClick={() => void toggleTask(task)} aria-label={`Toggle ${task.title}`} className="mt-0.5 text-aqua">
                   {task.status === "done" ? <CheckCircle2 className="h-5 w-5" /> : <Circle className="h-5 w-5 text-muted-foreground" />}
                 </button>
-                <span className={`flex-1 text-sm ${task.status === "done" ? "text-muted-foreground line-through" : "text-navy"}`}>{task.title}</span>
-                <button type="button" onClick={() => void removeTask(task)} aria-label={`Delete ${task.title}`} className="text-muted-foreground transition-colors hover:text-destructive"><Trash2 className="h-4 w-4" /></button>
+                <div className="flex-1">
+                  <p className={`text-sm ${task.status === "done" ? "text-muted-foreground line-through" : "text-navy"}`}>{task.title}</p>
+                  {task.details && <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{task.details}</p>}
+                  <div className="mt-1 flex flex-wrap items-center gap-2 text-[0.7rem] text-muted-foreground">
+                    {task.assigned_by && <span className="rounded-full bg-secondary px-2 py-0.5 text-navy">Assigned by admin</span>}
+                    {task.due_date && <span>Due {new Date(task.due_date).toLocaleDateString()}</span>}
+                  </div>
+                </div>
+                <button type="button" onClick={() => void removeTask(task)} aria-label={`Delete ${task.title}`} className="mt-0.5 text-muted-foreground transition-colors hover:text-destructive"><Trash2 className="h-4 w-4" /></button>
               </li>
             ))}
           </ul>

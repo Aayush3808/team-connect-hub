@@ -5,6 +5,7 @@ import { Download, FileUp, FolderLock, LogOut, RefreshCw, Trash2 } from "lucide-
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/swamn/Logo";
 import { MemberDashboard } from "@/components/swamn/MemberDashboard";
+import { AdminPanel } from "@/components/swamn/AdminPanel";
 import { supabase } from "@/integrations/supabase/client";
 import { FunctionsHttpError } from "@supabase/supabase-js";
 
@@ -46,6 +47,9 @@ const MemberWorkspace = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [files, setFiles] = useState<DriveFile[]>([]);
   const [displayName, setDisplayName] = useState("Team member");
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
@@ -60,8 +64,14 @@ const MemberWorkspace = () => {
       return;
     }
 
-    const { data: profile } = await supabase.from("profiles").select("display_name").eq("user_id", sessionData.session.user.id).maybeSingle();
+    const userId = sessionData.session.user.id;
+    const [{ data: profile }, { data: roles }] = await Promise.all([
+      supabase.from("profiles").select("display_name, avatar_url").eq("user_id", userId).maybeSingle(),
+      supabase.from("user_roles").select("role").eq("user_id", userId),
+    ]);
     if (profile?.display_name) setDisplayName(profile.display_name);
+    setAvatarUrl(profile?.avatar_url ?? null);
+    setIsAdmin((roles ?? []).some((entry) => entry.role === "admin"));
 
     const { data, error: functionError } = await supabase.functions.invoke("member-drive", { body: { action: "list" } });
     if (functionError) setError(await readFunctionError(functionError));
@@ -145,6 +155,11 @@ const MemberWorkspace = () => {
         <div className="container flex items-center justify-between py-5">
           <a href="/" aria-label="SWAMN home"><Logo size={26} /></a>
           <div className="flex items-center gap-3">
+            <span
+              aria-hidden
+              className="hidden h-9 w-9 rounded-full border border-border bg-secondary bg-cover bg-center sm:block"
+              style={avatarUrl ? { backgroundImage: `url(${avatarUrl})` } : undefined}
+            />
             <span className="hidden text-sm text-muted-foreground sm:inline">{displayName}</span>
             <Button variant="outline" size="sm" onClick={signOut} className="rounded-full">
               <LogOut className="h-4 w-4" /> Sign out
@@ -155,7 +170,19 @@ const MemberWorkspace = () => {
 
       <section className="container max-w-5xl py-12 md:py-16">
         <h1 className="sr-only">SWAMN member workspace</h1>
-        <MemberDashboard files={files} />
+        <div className="mb-10 flex items-center gap-4 rounded-2xl border border-border bg-card p-5">
+          <span
+            aria-hidden
+            className="h-16 w-16 shrink-0 rounded-full border border-border bg-secondary bg-cover bg-center"
+            style={avatarUrl ? { backgroundImage: `url(${avatarUrl})` } : undefined}
+          />
+          <div>
+            <p className="h-display text-2xl text-navy">{displayName}</p>
+            <p className="text-xs text-muted-foreground">{isAdmin ? "Administrator · SWAMN team" : "SWAMN team member"}</p>
+          </div>
+        </div>
+        {isAdmin && <div className="mb-10"><AdminPanel onChanged={() => setRefreshKey((value) => value + 1)} /></div>}
+        <MemberDashboard files={files} refreshKey={refreshKey} />
         <div className="mt-12 flex flex-col justify-between gap-6 border-b border-border pb-8 sm:flex-row sm:items-end">
           <div>
             <div className="mb-4 flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-muted-foreground"><FolderLock className="h-4 w-4 text-aqua" /> Private workspace</div>
