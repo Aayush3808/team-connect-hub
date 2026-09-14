@@ -99,6 +99,8 @@ export const MemberDashboard = ({ files, refreshKey = 0 }: { files: { name: stri
 
   const totalBytes = files.reduce((sum, file) => sum + (Number(file.size) || 0), 0);
 
+  const month = useMemo(() => monthGrid(), []);
+
   const checkIn = async (status: "present" | "remote") => {
     if (!userId) return;
     setBusy(true);
