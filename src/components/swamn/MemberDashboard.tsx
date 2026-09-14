@@ -105,6 +105,7 @@ export const MemberDashboard = ({ files, refreshKey = 0 }: { files: { name: stri
     if (!userId) return;
     setBusy(true);
     await supabase.from("member_attendance").upsert({ user_id: userId, day: todayKey(), status }, { onConflict: "user_id,day" });
+    await supabase.from("activity_log").insert({ user_id: userId, kind: "attendance", detail: status === "present" ? "Checked in" : "Checked in (remote)" });
     await load();
     setBusy(false);
   };
