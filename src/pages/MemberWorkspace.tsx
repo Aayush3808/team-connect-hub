@@ -5,6 +5,7 @@ import { Download, FileUp, FolderLock, LogOut, RefreshCw, Trash2 } from "lucide-
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/swamn/Logo";
 import { MemberDashboard } from "@/components/swamn/MemberDashboard";
+import { AdminPanel } from "@/components/swamn/AdminPanel";
 import { supabase } from "@/integrations/supabase/client";
 import { FunctionsHttpError } from "@supabase/supabase-js";
 
