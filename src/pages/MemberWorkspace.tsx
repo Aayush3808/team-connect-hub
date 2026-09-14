@@ -63,8 +63,14 @@ const MemberWorkspace = () => {
       return;
     }
 
-    const { data: profile } = await supabase.from("profiles").select("display_name").eq("user_id", sessionData.session.user.id).maybeSingle();
+    const userId = sessionData.session.user.id;
+    const [{ data: profile }, { data: roles }] = await Promise.all([
+      supabase.from("profiles").select("display_name, avatar_url").eq("user_id", userId).maybeSingle(),
+      supabase.from("user_roles").select("role").eq("user_id", userId),
+    ]);
     if (profile?.display_name) setDisplayName(profile.display_name);
+    setAvatarUrl(profile?.avatar_url ?? null);
+    setIsAdmin((roles ?? []).some((entry) => entry.role === "admin"));
 
     const { data, error: functionError } = await supabase.functions.invoke("member-drive", { body: { action: "list" } });
     if (functionError) setError(await readFunctionError(functionError));
