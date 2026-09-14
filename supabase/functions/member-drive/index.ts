@@ -68,7 +68,7 @@ Deno.serve(async (req) => {
   try {
     const user = await getUser(req);
     if (!user) return json({ error: "Please sign in to access your files." }, 401);
-    const body = await req.json() as { action?: string; fileId?: string; fileName?: string; mimeType?: string; contentBase64?: string };
+    const body = await req.json() as { action?: string; fileId?: string; fileName?: string; mimeType?: string; contentBase64?: string; toUserId?: string };
     const service = admin();
     const { data: profile } = await service.from("profiles").select("username").eq("user_id", user.id).maybeSingle();
     const username = profile?.username ?? user.email?.split("@")[0] ?? "member";
@@ -80,7 +80,28 @@ Deno.serve(async (req) => {
       return json(await response.json());
     }
 
-    if (!body.action || !["download", "delete", "upload"].includes(body.action)) return json({ error: "Unsupported file action." }, 400);
+    if (body.action === "list-shared") {
+      const { data: shares } = await service
+        .from("file_shares")
+        .select("file_id, file_name, mime_type, owner_id, created_at")
+        .eq("shared_with", user.id)
+        .order("created_at", { ascending: false });
+      const ownerIds = [...new Set((shares ?? []).map((share) => share.owner_id))];
+      const { data: owners } = ownerIds.length
+        ? await service.from("profiles").select("user_id, display_name").in("user_id", ownerIds)
+        : { data: [] as { user_id: string; display_name: string }[] };
+      const nameOf = new Map((owners ?? []).map((owner) => [owner.user_id, owner.display_name]));
+      return json({
+        files: (shares ?? []).map((share) => ({
+          id: share.file_id,
+          name: share.file_name,
+          mimeType: share.mime_type ?? "application/octet-stream",
+          sharedBy: nameOf.get(share.owner_id) ?? "Team member",
+        })),
+      });
+    }
+
+    if (!body.action || !["download", "delete", "upload", "share"].includes(body.action)) return json({ error: "Unsupported file action." }, 400);
     if (body.action !== "upload" && !body.fileId) return json({ error: "A file ID is required." }, 400);
 
     if (body.action === "upload") {
@@ -98,14 +119,41 @@ Deno.serve(async (req) => {
       return json(await response.json());
     }
 
-    await verifyFileInFolder(body.fileId as string, folderId);
-    if (body.action === "delete") {
-      await gateway(`/drive/v3/files/${encodeURIComponent(body.fileId as string)}`, { method: "DELETE" });
+    if (body.action === "share") {
+      if (!body.toUserId) return json({ error: "Choose a team member to share with." }, 400);
+      if (body.toUserId === user.id) return json({ error: "That file is already yours." }, 400);
+      await verifyFileInFolder(body.fileId as string, folderId);
+      const { error: shareError } = await service.from("file_shares").upsert({
+        file_id: body.fileId,
+        file_name: body.fileName ?? "Shared file",
+        mime_type: body.mimeType ?? null,
+        owner_id: user.id,
+        shared_with: body.toUserId,
+      }, { onConflict: "file_id,shared_with" });
+      if (shareError) throw shareError;
       return json({ ok: true });
     }
 
+    const { data: share } = await service
+      .from("file_shares")
+      .select("id")
+      .eq("file_id", body.fileId)
+      .eq("shared_with", user.id)
+      .maybeSingle();
+    const isShared = Boolean(share);
+    if (!isShared) await verifyFileInFolder(body.fileId as string, folderId);
+
+    if (body.action === "delete") {
+      if (isShared) return json({ error: "Only the owner can delete this file." }, 403);
+      await gateway(`/drive/v3/files/${encodeURIComponent(body.fileId as string)}`, { method: "DELETE" });
+      await service.from("file_shares").delete().eq("file_id", body.fileId).eq("owner_id", user.id);
+      return json({ ok: true });
+    }
+
+    const metaResponse = await gateway(`/drive/v3/files/${encodeURIComponent(body.fileId as string)}?fields=name,mimeType`);
+    const meta = await metaResponse.json() as { name?: string; mimeType?: string };
     const response = await gateway(`/drive/v3/files/${encodeURIComponent(body.fileId as string)}?alt=media`);
-    return json({ contentBase64: uint8ToBase64(new Uint8Array(await response.arrayBuffer())) });
+    return json({ contentBase64: uint8ToBase64(new Uint8Array(await response.arrayBuffer())), mimeType: meta.mimeType ?? "application/octet-stream", name: meta.name ?? "file" });
   } catch (error) {
     console.error("member-drive error:", error);
     return json({ error: error instanceof Error ? error.message : "Unable to access your private files." }, 500);
