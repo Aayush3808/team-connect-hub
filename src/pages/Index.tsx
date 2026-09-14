@@ -60,11 +60,11 @@ const Index = () => {
       <Commercial />
       <Algae />
       <Challenges />
-      <FutureScope />
-      <Achievements />
-      <Team />
       <Gallery />
       <Roadmap />
+      <Achievements />
+      <Team />
+      <FutureScope />
       <CTA />
       <FAQ />
       <Footer />

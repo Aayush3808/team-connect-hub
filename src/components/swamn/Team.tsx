@@ -13,7 +13,7 @@ const team = [
   },
   {
     name: "Vaibhav Raj",
-    role: "",
+    role: "Electronics, Mechanics and Website",
     sub: "",
     desc: "",
     initials: "VR",
@@ -30,7 +30,7 @@ const team = [
   },
   {
     name: "Manan",
-    role: "",
+    role: "Mechatronics and Documentation",
     sub: "",
     desc: "",
     initials: "MN",
@@ -56,8 +56,8 @@ const team = [
   },
   {
     name: "Annapurna",
-    role: "Human Resources",
-    sub: "People & Culture",
+    role: "Pitching and Presentation",
+    sub: "",
     desc: "Leads people operations at SWAMN — onboarding, team coordination, and culture. Keeps the team aligned, motivated, and moving in sync, ensuring every member has the clarity and support they need to do their best work.",
     initials: "AN",
     email: "",

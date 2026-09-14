@@ -21,9 +21,9 @@ export const Impact = () => (
   <section id="impact" className="relative py-28 md:py-36">
     <div className="container">
       <SectionHeader
-        eyebrow="Impact & Waste-to-Worth"
-        title={<>The river funds its own <span className="h-serif text-gradient">cleanup</span></>}
-        description="Every part of the SWAMN workflow — running the bots, handling pods, sorting and processing waste — is a job for a local community member. What comes out of the water pays for keeping it clean."
+        eyebrow="Commercial Viability & Impact"
+        title={<>Built to actually <span className="h-serif text-gradient">pay for itself</span></>}
+        description="Environmental projects fail for two reasons: they run out of money, or nobody wants to pay for them. SWAMN is engineered with both in mind — role separation drops unit cost, and what comes out of the water funds keeping it clean. Every step of the workflow is also a job for a local community member."
       />
 
       <div className="mt-16 grid gap-6 lg:grid-cols-2">
