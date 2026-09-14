@@ -60,10 +60,12 @@ export const MemberDashboard = ({ files, refreshKey = 0 }: { files: { name: stri
     setUserId(id);
     if (!id) return;
 
-    const since = lastDays(30)[0];
+    const now = new Date();
+    const monthStart = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-01`;
+    const since = [lastDays(30)[0], monthStart].sort()[0];
     const [attendanceResult, tasksResult, announcementsResult] = await Promise.all([
       supabase.from("member_attendance").select("id, day, status").eq("user_id", id).gte("day", since).order("day"),
-      supabase.from("member_tasks").select("id, title, status, due_date").eq("user_id", id).order("created_at", { ascending: false }),
+      supabase.from("member_tasks").select("id, title, status, due_date, details, assigned_by").eq("user_id", id).order("created_at", { ascending: false }),
       supabase.from("announcements").select("id, title, body, created_at").order("created_at", { ascending: false }).limit(5),
     ]);
 
@@ -72,7 +74,7 @@ export const MemberDashboard = ({ files, refreshKey = 0 }: { files: { name: stri
     setAnnouncements((announcementsResult.data ?? []) as Announcement[]);
   }, []);
 
-  useEffect(() => { void load(); }, [load]);
+  useEffect(() => { void load(); }, [load, refreshKey]);
 
   const days = useMemo(() => lastDays(14), []);
   const attendanceMap = useMemo(() => new Map(attendance.map((entry) => [entry.day, entry.status])), [attendance]);
