@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 
 type Attendance = { id: string; day: string; status: string };
-type Task = { id: string; title: string; status: string; due_date: string | null };
+type Task = { id: string; title: string; status: string; due_date: string | null; details: string | null; assigned_by: string | null };
 type Announcement = { id: string; title: string; body: string; created_at: string };
 
 const CHART_COLORS = ["hsl(var(--primary))", "#38bdf8", "#0ea5e9", "#94a3b8", "#cbd5f5"];
