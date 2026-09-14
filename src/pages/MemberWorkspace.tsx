@@ -153,8 +153,10 @@ const MemberWorkspace = () => {
         </div>
       </header>
 
-      <section className="container max-w-4xl py-12 md:py-16">
-        <div className="flex flex-col justify-between gap-6 border-b border-border pb-8 sm:flex-row sm:items-end">
+      <section className="container max-w-5xl py-12 md:py-16">
+        <h1 className="sr-only">SWAMN member workspace</h1>
+        <MemberDashboard files={files} />
+        <div className="mt-12 flex flex-col justify-between gap-6 border-b border-border pb-8 sm:flex-row sm:items-end">
           <div>
             <div className="mb-4 flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-muted-foreground"><FolderLock className="h-4 w-4 text-aqua" /> Private workspace</div>
             <h1 className="h-display text-4xl text-navy">Your SWAMN files</h1>
