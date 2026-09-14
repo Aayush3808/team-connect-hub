@@ -117,10 +117,14 @@ export const MemberLogin = () => {
               </div>
             </div>
             {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
+            {notice && <p role="status" className="text-sm text-navy">{notice}</p>}
             <Button type="submit" className="h-11 w-full rounded-full" disabled={loading}>
               {loading ? "Opening workspace…" : "Open my files"}
               {!loading && <ArrowRight className="h-4 w-4" />}
             </Button>
+            <button type="button" onClick={() => void onReset()} disabled={loading} className="w-full text-center text-xs text-muted-foreground underline-offset-4 transition-colors hover:text-navy hover:underline">
+              Forgot your password? Send a reset link to your email
+            </button>
           </form>
           <p className="mt-6 text-center text-xs leading-relaxed text-muted-foreground">
             Team accounts are created privately by SWAMN. If you need access, contact the team administrator.
