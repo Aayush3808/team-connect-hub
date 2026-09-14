@@ -46,6 +46,9 @@ const MemberWorkspace = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [files, setFiles] = useState<DriveFile[]>([]);
   const [displayName, setDisplayName] = useState("Team member");
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
