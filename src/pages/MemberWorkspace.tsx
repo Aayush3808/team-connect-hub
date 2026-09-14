@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Download, FileUp, FolderLock, LogOut, RefreshCw, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/swamn/Logo";
+import { MemberDashboard } from "@/components/swamn/MemberDashboard";
 import { supabase } from "@/integrations/supabase/client";
 import { FunctionsHttpError } from "@supabase/supabase-js";
 
