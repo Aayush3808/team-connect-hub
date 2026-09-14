@@ -377,15 +377,6 @@ export type Database = {
         }
         Returns: boolean
       }
-      task_leaderboard: {
-        Args: never
-        Returns: {
-          avatar_url: string
-          display_name: string
-          done_count: number
-          open_count: number
-        }[]
-      }
     }
     Enums: {
       app_role: "admin" | "user"
