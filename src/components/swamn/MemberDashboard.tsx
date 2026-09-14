@@ -32,7 +32,21 @@ const fileGroup = (name: string, mimeType: string) => {
   return "Documents";
 };
 
-export const MemberDashboard = ({ files }: { files: { name: string; mimeType: string; size?: string }[] }) => {
+const monthGrid = () => {
+  const now = new Date();
+  const first = new Date(now.getFullYear(), now.getMonth(), 1);
+  const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+  const cells: { key: string; label: number | null }[] = [];
+  for (let index = 0; index < first.getDay(); index += 1) cells.push({ key: `pad-${index}`, label: null });
+  for (let day = 1; day <= daysInMonth; day += 1) {
+    const date = new Date(now.getFullYear(), now.getMonth(), day);
+    const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+    cells.push({ key, label: day });
+  }
+  return { cells, monthLabel: now.toLocaleDateString(undefined, { month: "long", year: "numeric" }) };
+};
+
+export const MemberDashboard = ({ files, refreshKey = 0 }: { files: { name: string; mimeType: string; size?: string }[]; refreshKey?: number }) => {
   const [userId, setUserId] = useState<string | null>(null);
   const [attendance, setAttendance] = useState<Attendance[]>([]);
   const [tasks, setTasks] = useState<Task[]>([]);
