@@ -205,6 +205,34 @@ export const MemberDashboard = ({ files, refreshKey = 0 }: { files: { name: stri
         </div>
       </div>
 
+      <div className="rounded-2xl border border-border bg-card p-6">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h2 className="font-medium text-navy">Monthly tracker</h2>
+          <span className="text-xs text-muted-foreground">{month.monthLabel}</span>
+        </div>
+        <div className="mt-4 grid grid-cols-7 gap-1.5 text-center text-[0.65rem] text-muted-foreground">
+          {["S", "M", "T", "W", "T", "F", "S"].map((label, index) => <span key={`${label}-${index}`}>{label}</span>)}
+        </div>
+        <div className="mt-1.5 grid grid-cols-7 gap-1.5">
+          {month.cells.map((cell) => {
+            if (cell.label === null) return <span key={cell.key} />;
+            const status = attendanceMap.get(cell.key);
+            const isToday = cell.key === todayKey();
+            const tone = status === "present" ? "bg-primary text-primary-foreground" : status === "remote" ? "bg-secondary text-navy" : "bg-muted/40 text-muted-foreground";
+            return (
+              <span key={cell.key} title={`${cell.key} · ${status ?? "no check-in"}`} className={`flex aspect-square items-center justify-center rounded-lg text-xs ${tone} ${isToday ? "ring-2 ring-aqua" : ""}`}>
+                {cell.label}
+              </span>
+            );
+          })}
+        </div>
+        <div className="mt-3 flex flex-wrap gap-4 text-xs text-muted-foreground">
+          <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-primary" /> Present</span>
+          <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-secondary" /> Remote</span>
+          <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-muted" /> No check-in</span>
+        </div>
+      </div>
+
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="rounded-2xl border border-border bg-card p-6">
           <h2 className="font-medium text-navy">Your tasks</h2>
