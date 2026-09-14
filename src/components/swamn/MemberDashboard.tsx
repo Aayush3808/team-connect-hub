@@ -243,12 +243,19 @@ export const MemberDashboard = ({ files, refreshKey = 0 }: { files: { name: stri
           <ul className="mt-4 divide-y divide-border">
             {tasks.length === 0 && <li className="py-6 text-sm text-muted-foreground">No tasks yet. Add your first one above.</li>}
             {tasks.map((task) => (
-              <li key={task.id} className="flex items-center gap-3 py-3">
-                <button type="button" onClick={() => void toggleTask(task)} aria-label={`Toggle ${task.title}`} className="text-aqua">
+              <li key={task.id} className="flex items-start gap-3 py-3">
+                <button type="button" onClick={() => void toggleTask(task)} aria-label={`Toggle ${task.title}`} className="mt-0.5 text-aqua">
                   {task.status === "done" ? <CheckCircle2 className="h-5 w-5" /> : <Circle className="h-5 w-5 text-muted-foreground" />}
                 </button>
-                <span className={`flex-1 text-sm ${task.status === "done" ? "text-muted-foreground line-through" : "text-navy"}`}>{task.title}</span>
-                <button type="button" onClick={() => void removeTask(task)} aria-label={`Delete ${task.title}`} className="text-muted-foreground transition-colors hover:text-destructive"><Trash2 className="h-4 w-4" /></button>
+                <div className="flex-1">
+                  <p className={`text-sm ${task.status === "done" ? "text-muted-foreground line-through" : "text-navy"}`}>{task.title}</p>
+                  {task.details && <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{task.details}</p>}
+                  <div className="mt-1 flex flex-wrap items-center gap-2 text-[0.7rem] text-muted-foreground">
+                    {task.assigned_by && <span className="rounded-full bg-secondary px-2 py-0.5 text-navy">Assigned by admin</span>}
+                    {task.due_date && <span>Due {new Date(task.due_date).toLocaleDateString()}</span>}
+                  </div>
+                </div>
+                <button type="button" onClick={() => void removeTask(task)} aria-label={`Delete ${task.title}`} className="mt-0.5 text-muted-foreground transition-colors hover:text-destructive"><Trash2 className="h-4 w-4" /></button>
               </li>
             ))}
           </ul>
