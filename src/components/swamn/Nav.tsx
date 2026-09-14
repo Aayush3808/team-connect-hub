@@ -79,6 +79,13 @@ export const Nav = () => {
           >
             Join the Mission
           </Link>
+          <Link
+            to="/team"
+            aria-label="Team login"
+            className="hidden h-9 items-center rounded-full border border-border bg-card px-4 text-xs font-medium tracking-wide text-navy transition-colors hover:bg-secondary sm:inline-flex"
+          >
+            Team login
+          </Link>
           <button
             type="button"
             onClick={() => setOpen((o) => !o)}
@@ -117,6 +124,13 @@ export const Nav = () => {
               className="mt-2 inline-flex h-10 items-center justify-center rounded-full bg-navy px-4 text-xs font-medium tracking-wide text-primary-foreground"
             >
               Join the Mission
+            </Link>
+            <Link
+              to="/team"
+              onClick={() => setOpen(false)}
+              className="mt-1 inline-flex h-10 items-center justify-center rounded-full border border-border bg-card px-4 text-xs font-medium tracking-wide text-navy"
+            >
+              Team login
             </Link>
           </nav>
         </div>

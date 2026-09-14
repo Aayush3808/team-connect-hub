@@ -6,6 +6,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import Index from "./pages/Index.tsx";
 import Join from "./pages/Join.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import MemberLogin from "./components/swamn/MemberLogin.tsx";
+import MemberWorkspace from "./pages/MemberWorkspace.tsx";
 
 const queryClient = new QueryClient();
 
@@ -18,6 +20,8 @@ const App = () => (
         <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/join" element={<Join />} />
+         <Route path="/team" element={<MemberLogin />} />
+         <Route path="/team/files" element={<MemberWorkspace />} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
