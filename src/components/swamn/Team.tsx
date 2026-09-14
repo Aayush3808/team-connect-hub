@@ -14,8 +14,8 @@ const team = [
   {
     name: "Vaibhav Raj",
     role: "Electronics, Mechanics and Website",
-    sub: "",
-    desc: "",
+    sub: "Systems & Web",
+    desc: "Builds and wires the electronics behind the bot — power, sensors, and control boards — handles the mechanical assembly, and designs and maintains the SWAMN website.",
     initials: "VR",
     email: "",
     photo: "/images/team/Vaibhav.jpeg",
@@ -31,8 +31,8 @@ const team = [
   {
     name: "Manan",
     role: "Mechatronics and Documentation",
-    sub: "",
-    desc: "",
+    sub: "Integration & Records",
+    desc: "Brings the mechanical and electronic sides together during build and testing, and keeps every design decision, test run, and result properly documented for the team.",
     initials: "MN",
     email: "",
     photo: "/images/team/Manan.jpeg",
