@@ -1,0 +1,229 @@
+import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
+import { Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { CalendarCheck, CheckCircle2, Circle, Megaphone, Plus, Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { supabase } from "@/integrations/supabase/client";
+
+type Attendance = { id: string; day: string; status: string };
+type Task = { id: string; title: string; status: string; due_date: string | null };
+type Announcement = { id: string; title: string; body: string; created_at: string };
+
+const CHART_COLORS = ["hsl(var(--primary))", "#38bdf8", "#0ea5e9", "#94a3b8", "#cbd5f5"];
+
+const todayKey = () => new Date().toISOString().slice(0, 10);
+
+const lastDays = (count: number) => {
+  const days: string[] = [];
+  for (let index = count - 1; index >= 0; index -= 1) {
+    const date = new Date();
+    date.setDate(date.getDate() - index);
+    days.push(date.toISOString().slice(0, 10));
+  }
+  return days;
+};
+
+const fileGroup = (name: string, mimeType: string) => {
+  const type = mimeType.toLowerCase();
+  if (type.startsWith("image/")) return "Images";
+  if (type.includes("pdf")) return "PDFs";
+  if (type.startsWith("video/")) return "Videos";
+  if (type.includes("sheet") || name.endsWith(".csv") || name.endsWith(".xlsx")) return "Sheets";
+  return "Documents";
+};
+
+export const MemberDashboard = ({ files }: { files: { name: string; mimeType: string; size?: string }[] }) => {
+  const [userId, setUserId] = useState<string | null>(null);
+  const [attendance, setAttendance] = useState<Attendance[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const [newTask, setNewTask] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  const load = useCallback(async () => {
+    const { data: sessionData } = await supabase.auth.getSession();
+    const id = sessionData.session?.user.id ?? null;
+    setUserId(id);
+    if (!id) return;
+
+    const since = lastDays(30)[0];
+    const [attendanceResult, tasksResult, announcementsResult] = await Promise.all([
+      supabase.from("member_attendance").select("id, day, status").eq("user_id", id).gte("day", since).order("day"),
+      supabase.from("member_tasks").select("id, title, status, due_date").eq("user_id", id).order("created_at", { ascending: false }),
+      supabase.from("announcements").select("id, title, body, created_at").order("created_at", { ascending: false }).limit(5),
+    ]);
+
+    setAttendance((attendanceResult.data ?? []) as Attendance[]);
+    setTasks((tasksResult.data ?? []) as Task[]);
+    setAnnouncements((announcementsResult.data ?? []) as Announcement[]);
+  }, []);
+
+  useEffect(() => { void load(); }, [load]);
+
+  const days = useMemo(() => lastDays(14), []);
+  const attendanceMap = useMemo(() => new Map(attendance.map((entry) => [entry.day, entry.status])), [attendance]);
+  const checkedInToday = attendanceMap.has(todayKey());
+
+  const attendanceChart = days.map((day) => ({
+    label: new Date(day).toLocaleDateString(undefined, { day: "numeric", month: "short" }),
+    value: attendanceMap.get(day) === "present" ? 1 : attendanceMap.get(day) === "remote" ? 0.6 : 0,
+  }));
+
+  const presentDays = attendance.filter((entry) => entry.status !== "absent").length;
+  const doneTasks = tasks.filter((task) => task.status === "done").length;
+
+  const storageChart = useMemo(() => {
+    const groups = new Map<string, number>();
+    files.forEach((file) => {
+      const key = fileGroup(file.name, file.mimeType ?? "");
+      groups.set(key, (groups.get(key) ?? 0) + 1);
+    });
+    return [...groups.entries()].map(([name, value]) => ({ name, value }));
+  }, [files]);
+
+  const totalBytes = files.reduce((sum, file) => sum + (Number(file.size) || 0), 0);
+
+  const checkIn = async (status: "present" | "remote") => {
+    if (!userId) return;
+    setBusy(true);
+    await supabase.from("member_attendance").upsert({ user_id: userId, day: todayKey(), status }, { onConflict: "user_id,day" });
+    await load();
+    setBusy(false);
+  };
+
+  const addTask = async (event: FormEvent) => {
+    event.preventDefault();
+    if (!userId || !newTask.trim()) return;
+    setBusy(true);
+    await supabase.from("member_tasks").insert({ user_id: userId, title: newTask.trim() });
+    setNewTask("");
+    await load();
+    setBusy(false);
+  };
+
+  const toggleTask = async (task: Task) => {
+    setBusy(true);
+    await supabase.from("member_tasks").update({ status: task.status === "done" ? "todo" : "done" }).eq("id", task.id);
+    await load();
+    setBusy(false);
+  };
+
+  const removeTask = async (task: Task) => {
+    setBusy(true);
+    await supabase.from("member_tasks").delete().eq("id", task.id);
+    await load();
+    setBusy(false);
+  };
+
+  const stats = [
+    { label: "Days active (30 days)", value: presentDays },
+    { label: "Tasks completed", value: doneTasks },
+    { label: "Open tasks", value: tasks.length - doneTasks },
+    { label: "Files stored", value: files.length },
+  ];
+
+  return (
+    <div className="space-y-8">
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        {stats.map((stat) => (
+          <div key={stat.label} className="rounded-2xl border border-border bg-card p-5">
+            <p className="h-display text-3xl text-navy">{stat.value}</p>
+            <p className="mt-1 text-xs leading-snug text-muted-foreground">{stat.label}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-2">
+        <div className="rounded-2xl border border-border bg-card p-6">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h2 className="flex items-center gap-2 font-medium text-navy"><CalendarCheck className="h-4 w-4 text-aqua" /> Attendance</h2>
+            {checkedInToday ? (
+              <span className="rounded-full bg-secondary px-3 py-1 text-xs text-navy">Checked in today</span>
+            ) : (
+              <div className="flex gap-2">
+                <Button size="sm" className="rounded-full" disabled={busy} onClick={() => void checkIn("present")}>Check in</Button>
+                <Button size="sm" variant="outline" className="rounded-full" disabled={busy} onClick={() => void checkIn("remote")}>Remote</Button>
+              </div>
+            )}
+          </div>
+          <div className="mt-6 h-52">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={attendanceChart} margin={{ left: -28, right: 4 }}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} opacity={0.25} />
+                <XAxis dataKey="label" tick={{ fontSize: 10 }} interval={1} tickLine={false} axisLine={false} />
+                <YAxis domain={[0, 1]} ticks={[0, 1]} tick={{ fontSize: 10 }} tickLine={false} axisLine={false} />
+                <Tooltip cursor={{ opacity: 0.08 }} formatter={(value: number) => (value === 1 ? "Present" : value > 0 ? "Remote" : "No check-in")} />
+                <Bar dataKey="value" radius={[6, 6, 0, 0]} fill="hsl(var(--primary))" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        <div className="rounded-2xl border border-border bg-card p-6">
+          <h2 className="font-medium text-navy">Your files at a glance</h2>
+          <p className="mt-1 text-xs text-muted-foreground">{files.length} files · {(totalBytes / (1024 * 1024)).toFixed(1)} MB stored</p>
+          <div className="mt-4 h-52">
+            {storageChart.length === 0 ? (
+              <div className="flex h-full items-center justify-center text-sm text-muted-foreground">Add files to see the breakdown.</div>
+            ) : (
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie data={storageChart} dataKey="value" nameKey="name" innerRadius={44} outerRadius={76} paddingAngle={3}>
+                    {storageChart.map((entry, index) => <Cell key={entry.name} fill={CHART_COLORS[index % CHART_COLORS.length]} />)}
+                  </Pie>
+                  <Tooltip />
+                </PieChart>
+              </ResponsiveContainer>
+            )}
+          </div>
+          <div className="mt-2 flex flex-wrap justify-center gap-3 text-xs text-muted-foreground">
+            {storageChart.map((entry, index) => (
+              <span key={entry.name} className="flex items-center gap-1.5">
+                <span className="h-2 w-2 rounded-full" style={{ background: CHART_COLORS[index % CHART_COLORS.length] }} />
+                {entry.name} ({entry.value})
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-2">
+        <div className="rounded-2xl border border-border bg-card p-6">
+          <h2 className="font-medium text-navy">Your tasks</h2>
+          <form onSubmit={addTask} className="mt-4 flex gap-2">
+            <Input value={newTask} onChange={(event) => setNewTask(event.target.value)} placeholder="Add a task…" maxLength={200} />
+            <Button type="submit" size="icon" className="shrink-0 rounded-full" disabled={busy} aria-label="Add task"><Plus className="h-4 w-4" /></Button>
+          </form>
+          <ul className="mt-4 divide-y divide-border">
+            {tasks.length === 0 && <li className="py-6 text-sm text-muted-foreground">No tasks yet. Add your first one above.</li>}
+            {tasks.map((task) => (
+              <li key={task.id} className="flex items-center gap-3 py-3">
+                <button type="button" onClick={() => void toggleTask(task)} aria-label={`Toggle ${task.title}`} className="text-aqua">
+                  {task.status === "done" ? <CheckCircle2 className="h-5 w-5" /> : <Circle className="h-5 w-5 text-muted-foreground" />}
+                </button>
+                <span className={`flex-1 text-sm ${task.status === "done" ? "text-muted-foreground line-through" : "text-navy"}`}>{task.title}</span>
+                <button type="button" onClick={() => void removeTask(task)} aria-label={`Delete ${task.title}`} className="text-muted-foreground transition-colors hover:text-destructive"><Trash2 className="h-4 w-4" /></button>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="rounded-2xl border border-border bg-card p-6">
+          <h2 className="flex items-center gap-2 font-medium text-navy"><Megaphone className="h-4 w-4 text-aqua" /> Team announcements</h2>
+          <ul className="mt-4 space-y-4">
+            {announcements.length === 0 && <li className="text-sm text-muted-foreground">No announcements yet.</li>}
+            {announcements.map((item) => (
+              <li key={item.id} className="rounded-xl bg-secondary/60 p-4">
+                <p className="text-sm font-medium text-navy">{item.title}</p>
+                <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{item.body}</p>
+                <p className="mt-2 text-xs text-muted-foreground">{new Date(item.created_at).toLocaleDateString()}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default MemberDashboard;

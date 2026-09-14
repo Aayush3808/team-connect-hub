@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Download, FileUp, FolderLock, LogOut, RefreshCw, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/swamn/Logo";
+import { MemberDashboard } from "@/components/swamn/MemberDashboard";
 import { supabase } from "@/integrations/supabase/client";
 import { FunctionsHttpError } from "@supabase/supabase-js";
 
@@ -152,11 +153,13 @@ const MemberWorkspace = () => {
         </div>
       </header>
 
-      <section className="container max-w-4xl py-12 md:py-16">
-        <div className="flex flex-col justify-between gap-6 border-b border-border pb-8 sm:flex-row sm:items-end">
+      <section className="container max-w-5xl py-12 md:py-16">
+        <h1 className="sr-only">SWAMN member workspace</h1>
+        <MemberDashboard files={files} />
+        <div className="mt-12 flex flex-col justify-between gap-6 border-b border-border pb-8 sm:flex-row sm:items-end">
           <div>
             <div className="mb-4 flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-muted-foreground"><FolderLock className="h-4 w-4 text-aqua" /> Private workspace</div>
-            <h1 className="h-display text-4xl text-navy">Your SWAMN files</h1>
+            <h2 className="h-display text-4xl text-navy">Your SWAMN files</h2>
             <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground">Only files in your assigned Drive folder appear here.</p>
           </div>
           <div className="flex gap-2">
