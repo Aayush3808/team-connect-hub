@@ -154,6 +154,11 @@ const MemberWorkspace = () => {
         <div className="container flex items-center justify-between py-5">
           <a href="/" aria-label="SWAMN home"><Logo size={26} /></a>
           <div className="flex items-center gap-3">
+            <span
+              aria-hidden
+              className="hidden h-9 w-9 rounded-full border border-border bg-secondary bg-cover bg-center sm:block"
+              style={avatarUrl ? { backgroundImage: `url(${avatarUrl})` } : undefined}
+            />
             <span className="hidden text-sm text-muted-foreground sm:inline">{displayName}</span>
             <Button variant="outline" size="sm" onClick={signOut} className="rounded-full">
               <LogOut className="h-4 w-4" /> Sign out
@@ -164,7 +169,19 @@ const MemberWorkspace = () => {
 
       <section className="container max-w-5xl py-12 md:py-16">
         <h1 className="sr-only">SWAMN member workspace</h1>
-        <MemberDashboard files={files} />
+        <div className="mb-10 flex items-center gap-4 rounded-2xl border border-border bg-card p-5">
+          <span
+            aria-hidden
+            className="h-16 w-16 shrink-0 rounded-full border border-border bg-secondary bg-cover bg-center"
+            style={avatarUrl ? { backgroundImage: `url(${avatarUrl})` } : undefined}
+          />
+          <div>
+            <p className="h-display text-2xl text-navy">{displayName}</p>
+            <p className="text-xs text-muted-foreground">{isAdmin ? "Administrator · SWAMN team" : "SWAMN team member"}</p>
+          </div>
+        </div>
+        {isAdmin && <div className="mb-10"><AdminPanel onChanged={() => setRefreshKey((value) => value + 1)} /></div>}
+        <MemberDashboard files={files} refreshKey={refreshKey} />
         <div className="mt-12 flex flex-col justify-between gap-6 border-b border-border pb-8 sm:flex-row sm:items-end">
           <div>
             <div className="mb-4 flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-muted-foreground"><FolderLock className="h-4 w-4 text-aqua" /> Private workspace</div>
