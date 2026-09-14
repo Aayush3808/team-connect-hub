@@ -127,7 +127,9 @@ export type Database = {
       }
       member_tasks: {
         Row: {
+          assigned_by: string | null
           created_at: string
+          details: string | null
           due_date: string | null
           id: string
           status: string
@@ -136,7 +138,9 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          assigned_by?: string | null
           created_at?: string
+          details?: string | null
           due_date?: string | null
           id?: string
           status?: string
@@ -145,7 +149,9 @@ export type Database = {
           user_id: string
         }
         Update: {
+          assigned_by?: string | null
           created_at?: string
+          details?: string | null
           due_date?: string | null
           id?: string
           status?: string
@@ -196,6 +202,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          avatar_url: string | null
           created_at: string
           display_name: string
           updated_at: string
@@ -203,6 +210,7 @@ export type Database = {
           username: string
         }
         Insert: {
+          avatar_url?: string | null
           created_at?: string
           display_name: string
           updated_at?: string
@@ -210,6 +218,7 @@ export type Database = {
           username: string
         }
         Update: {
+          avatar_url?: string | null
           created_at?: string
           display_name?: string
           updated_at?: string
