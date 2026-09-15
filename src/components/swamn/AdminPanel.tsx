@@ -22,6 +22,7 @@ export const AdminPanel = ({ onChanged }: { onChanged?: () => void }) => {
   const [taskDue, setTaskDue] = useState("");
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState("");
+  const [loadError, setLoadError] = useState("");
 
   const load = useCallback(async () => {
     const [membersResult, announcementsResult, tasksResult] = await Promise.all([
@@ -29,6 +30,7 @@ export const AdminPanel = ({ onChanged }: { onChanged?: () => void }) => {
       supabase.from("announcements").select("id, title, body, created_at").order("created_at", { ascending: false }),
       supabase.from("member_tasks").select("id, title, status, due_date, user_id").not("assigned_by", "is", null).order("created_at", { ascending: false }).limit(20),
     ]);
+    setLoadError(membersResult.error ? "The team list could not be loaded. Refresh the page and try again." : "");
     setMembers((membersResult.data ?? []) as Member[]);
     setAnnouncements((announcementsResult.data ?? []) as Announcement[]);
     setAssigned((tasksResult.data ?? []) as AssignedTask[]);
@@ -73,7 +75,7 @@ export const AdminPanel = ({ onChanged }: { onChanged?: () => void }) => {
       due_date: taskDue || null,
       assigned_by: sessionData.session?.user.id ?? null,
     });
-    setNotice(error ? "That task could not be assigned." : "Task assigned — it now shows on their page.");
+    setNotice(error ? `That task could not be assigned: ${error.message}` : "Task assigned — it now shows on their page.");
     if (!error) { setTaskTitle(""); setTaskDetails(""); setTaskDue(""); await load(); onChanged?.(); }
     setBusy(false);
   };
@@ -85,6 +87,7 @@ export const AdminPanel = ({ onChanged }: { onChanged?: () => void }) => {
       <h2 className="flex items-center gap-2 font-medium text-navy"><ShieldCheck className="h-4 w-4 text-aqua" /> Admin controls</h2>
       <p className="mt-1 text-xs text-muted-foreground">Only you can see this panel.</p>
       {notice && <p role="status" className="mt-4 rounded-xl bg-card px-4 py-2 text-sm text-navy">{notice}</p>}
+      {loadError && <p role="alert" className="mt-4 rounded-xl border border-destructive/30 bg-card px-4 py-2 text-sm text-destructive">{loadError}</p>}
 
       <div className="mt-6 grid gap-6 lg:grid-cols-2">
         <form onSubmit={postAnnouncement} className="rounded-2xl border border-border bg-card p-5">
@@ -122,6 +125,7 @@ export const AdminPanel = ({ onChanged }: { onChanged?: () => void }) => {
                 <option value="">Choose a member…</option>
                 {members.map((member) => <option key={member.user_id} value={member.user_id}>{member.display_name}</option>)}
               </select>
+              {!loadError && members.length === 0 && <p className="text-xs text-muted-foreground">Loading team members…</p>}
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="t-title">Task</Label>
@@ -135,7 +139,7 @@ export const AdminPanel = ({ onChanged }: { onChanged?: () => void }) => {
               <Label htmlFor="t-due">Due date (optional)</Label>
               <Input id="t-due" type="date" value={taskDue} onChange={(event) => setTaskDue(event.target.value)} />
             </div>
-            <Button type="submit" disabled={busy} className="rounded-full">Assign task</Button>
+            <Button type="submit" disabled={busy || members.length === 0 || !taskMember || !taskTitle.trim()} className="rounded-full">{busy ? "Assigning…" : "Assign task"}</Button>
           </div>
           <ul className="mt-5 space-y-2">
             {assigned.map((task) => (

@@ -21,7 +21,7 @@ type DriveFile = {
   sharedBy?: string;
 };
 
-type Member = { user_id: string; display_name: string };
+type Member = { user_id: string; display_name: string; designation: string | null; avatar_url: string | null };
 
 const readFunctionError = async (error: unknown) => {
   if (error instanceof FunctionsHttpError) {
@@ -61,40 +61,22 @@ const MemberWorkspace = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [busy, setBusy] = useState(false);
+  const [activeAction, setActiveAction] = useState<string | null>(null);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [preview, setPreview] = useState<{ name: string; mimeType: string; url: string } | null>(null);
   const [shareFile, setShareFile] = useState<DriveFile | null>(null);
   const [shareTarget, setShareTarget] = useState("");
+  const fileCache = useRef(new Map<string, Blob>());
 
   const logActivity = useCallback(async (kind: string, detail: string) => {
     if (!userId) return;
     await supabase.from("activity_log").insert({ user_id: userId, kind, detail });
   }, [userId]);
 
-  const loadFiles = useCallback(async () => {
+  const loadDriveFiles = useCallback(async () => {
     setLoading(true);
     setError("");
-    const { data: sessionData } = await supabase.auth.getSession();
-    if (!sessionData.session) {
-      navigate("/team", { replace: true });
-      return;
-    }
-
-    const id = sessionData.session.user.id;
-    setUserId(id);
-    const [{ data: profile }, { data: roles }, { data: allProfiles }] = await Promise.all([
-      supabase.from("profiles").select("display_name, avatar_url, designation").eq("user_id", id).maybeSingle(),
-      supabase.from("user_roles").select("role").eq("user_id", id),
-      supabase.from("profiles").select("user_id, display_name").order("display_name"),
-    ]);
-    if (profile?.display_name) setDisplayName(profile.display_name);
-    setAvatarUrl(profile?.avatar_url ?? null);
-    setDesignation(profile?.designation ?? "");
-    setIsAdmin((roles ?? []).some((entry) => entry.role === "admin"));
-    setMembers(((allProfiles ?? []) as Member[]).filter((member) => member.user_id !== id));
-
     const [own, shared] = await Promise.all([
       supabase.functions.invoke("member-drive", { body: { action: "list" } }),
       supabase.functions.invoke("member-drive", { body: { action: "list-shared" } }),
@@ -103,9 +85,33 @@ const MemberWorkspace = () => {
     else setFiles((own.data?.files ?? []) as DriveFile[]);
     setSharedFiles((shared.data?.files ?? []) as DriveFile[]);
     setLoading(false);
-  }, [navigate]);
+  }, []);
 
-  useEffect(() => { void loadFiles(); }, [loadFiles]);
+  const loadWorkspace = useCallback(async () => {
+    const { data: sessionData } = await supabase.auth.getSession();
+    if (!sessionData.session) {
+      navigate("/team", { replace: true });
+      return;
+    }
+
+    const id = sessionData.session.user.id;
+    setUserId(id);
+    const [{ data: profile, error: profileError }, { data: roles }, { data: allProfiles, error: directoryError }] = await Promise.all([
+      supabase.from("profiles").select("display_name, avatar_url, designation").eq("user_id", id).maybeSingle(),
+      supabase.from("user_roles").select("role").eq("user_id", id),
+      supabase.from("profiles").select("user_id, display_name, designation, avatar_url").order("display_name"),
+    ]);
+    if (profileError) setError("Your profile could not be loaded. Please refresh the page.");
+    if (profile?.display_name) setDisplayName(profile.display_name);
+    setAvatarUrl(profile?.avatar_url ?? null);
+    setDesignation(profile?.designation ?? "");
+    setIsAdmin((roles ?? []).some((entry) => entry.role === "admin"));
+    setMembers(((allProfiles ?? []) as Member[]).filter((member) => member.user_id !== id));
+    if (directoryError) setError("The team directory could not be loaded, so sharing is temporarily unavailable.");
+    await loadDriveFiles();
+  }, [loadDriveFiles, navigate]);
+
+  useEffect(() => { void loadWorkspace(); }, [loadWorkspace]);
 
   const onUpload = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -116,7 +122,7 @@ const MemberWorkspace = () => {
       return;
     }
 
-    setBusy(true);
+    setActiveAction("upload");
     setError("");
     setMessage("");
     const contentBase64 = await new Promise<string>((resolve, reject) => {
@@ -132,27 +138,31 @@ const MemberWorkspace = () => {
     else {
       setMessage(`${file.name} was added to your folder.`);
       await logActivity("upload", `Uploaded ${file.name}`);
-      await loadFiles();
+      await loadDriveFiles();
       setRefreshKey((value) => value + 1);
     }
-    setBusy(false);
+    setActiveAction(null);
   };
 
   const fetchFile = async (file: DriveFile) => {
+    const cached = fileCache.current.get(file.id);
+    if (cached) return cached;
     const { data, error: functionError } = await supabase.functions.invoke("member-drive", { body: { action: "download", fileId: file.id } });
     if (functionError) {
       setError(await readFunctionError(functionError));
       return null;
     }
-    return decodeBase64(data.contentBase64, data.mimeType || file.mimeType);
+    const blob = decodeBase64(data.contentBase64, data.mimeType || file.mimeType);
+    fileCache.current.set(file.id, blob);
+    return blob;
   };
 
   const previewFile = async (file: DriveFile) => {
-    setBusy(true);
+    setActiveAction(`preview:${file.id}`);
     setError("");
     const blob = await fetchFile(file);
     if (blob) setPreview({ name: file.name, mimeType: blob.type || file.mimeType, url: URL.createObjectURL(blob) });
-    setBusy(false);
+    setActiveAction(null);
   };
 
   const closePreview = () => {
@@ -161,7 +171,7 @@ const MemberWorkspace = () => {
   };
 
   const downloadFile = async (file: DriveFile) => {
-    setBusy(true);
+    setActiveAction(`download:${file.id}`);
     setError("");
     const blob = await fetchFile(file);
     if (blob) {
@@ -172,26 +182,27 @@ const MemberWorkspace = () => {
       anchor.click();
       URL.revokeObjectURL(url);
     }
-    setBusy(false);
+    setActiveAction(null);
   };
 
   const deleteFile = async (file: DriveFile) => {
     if (!window.confirm(`Remove ${file.name} from your folder?`)) return;
-    setBusy(true);
+    setActiveAction(`delete:${file.id}`);
     setError("");
     const { error: functionError } = await supabase.functions.invoke("member-drive", { body: { action: "delete", fileId: file.id } });
     if (functionError) setError(await readFunctionError(functionError));
     else {
       setMessage(`${file.name} was removed.`);
+      fileCache.current.delete(file.id);
       await logActivity("delete", `Removed ${file.name}`);
-      await loadFiles();
+      setFiles((current) => current.filter((item) => item.id !== file.id));
     }
-    setBusy(false);
+    setActiveAction(null);
   };
 
   const confirmShare = async () => {
     if (!shareFile || !shareTarget) return;
-    setBusy(true);
+    setActiveAction(`share:${shareFile.id}`);
     setError("");
     const { error: functionError } = await supabase.functions.invoke("member-drive", {
       body: { action: "share", fileId: shareFile.id, fileName: shareFile.name, mimeType: shareFile.mimeType, toUserId: shareTarget },
@@ -203,7 +214,7 @@ const MemberWorkspace = () => {
     }
     setShareFile(null);
     setShareTarget("");
-    setBusy(false);
+    setActiveAction(null);
   };
 
   const signOut = async () => {
@@ -223,12 +234,12 @@ const MemberWorkspace = () => {
         </p>
       </div>
       <div className="flex shrink-0 flex-wrap gap-2">
-        <Button variant="outline" size="sm" onClick={() => void previewFile(file)} disabled={busy} className="rounded-full"><Eye className="h-4 w-4" /> Preview</Button>
-        <Button variant="outline" size="sm" onClick={() => void downloadFile(file)} disabled={busy} className="rounded-full"><Download className="h-4 w-4" /> Download</Button>
+        <Button variant="outline" size="sm" onClick={() => void previewFile(file)} disabled={activeAction === `preview:${file.id}`} className="rounded-full"><Eye className="h-4 w-4" /> {activeAction === `preview:${file.id}` ? "Opening…" : "Preview"}</Button>
+        <Button variant="outline" size="sm" onClick={() => void downloadFile(file)} disabled={activeAction === `download:${file.id}`} className="rounded-full"><Download className="h-4 w-4" /> Download</Button>
         {owned && (
           <>
-            <Button variant="outline" size="sm" onClick={() => { setShareFile(file); setShareTarget(""); }} disabled={busy} className="rounded-full"><Share2 className="h-4 w-4" /> Share</Button>
-            <Button variant="ghost" size="icon" onClick={() => void deleteFile(file)} disabled={busy} aria-label={`Delete ${file.name}`} className="text-destructive hover:text-destructive"><Trash2 className="h-4 w-4" /></Button>
+            <Button variant="outline" size="sm" onClick={() => { setShareFile(file); setShareTarget(""); }} className="rounded-full"><Share2 className="h-4 w-4" /> Share</Button>
+            <Button variant="ghost" size="icon" onClick={() => void deleteFile(file)} disabled={activeAction === `delete:${file.id}`} aria-label={`Delete ${file.name}`} className="text-destructive hover:text-destructive"><Trash2 className="h-4 w-4" /></Button>
           </>
         )}
       </div>
@@ -289,8 +300,8 @@ const MemberWorkspace = () => {
           </div>
           <div className="flex gap-2">
             <input ref={inputRef} type="file" className="hidden" onChange={onUpload} />
-            <Button onClick={() => inputRef.current?.click()} disabled={busy} className="rounded-full"><FileUp className="h-4 w-4" /> Add file</Button>
-            <Button variant="outline" size="icon" onClick={() => void loadFiles()} disabled={loading || busy} aria-label="Refresh files" className="rounded-full"><RefreshCw className="h-4 w-4" /></Button>
+            <Button onClick={() => inputRef.current?.click()} disabled={activeAction === "upload"} className="rounded-full"><FileUp className="h-4 w-4" /> {activeAction === "upload" ? "Adding…" : "Add file"}</Button>
+            <Button variant="outline" size="icon" onClick={() => void loadDriveFiles()} disabled={loading} aria-label="Refresh files" className="rounded-full"><RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} /></Button>
           </div>
         </div>
 
@@ -330,9 +341,10 @@ const MemberWorkspace = () => {
             <Label htmlFor="share-target">Team member</Label>
             <select id="share-target" value={shareTarget} onChange={(event) => setShareTarget(event.target.value)} className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm">
               <option value="">Choose a member…</option>
-              {members.map((member) => <option key={member.user_id} value={member.user_id}>{member.display_name}</option>)}
+               {members.map((member) => <option key={member.user_id} value={member.user_id}>{member.display_name}{member.designation ? ` — ${member.designation}` : ""}</option>)}
             </select>
-            <Button onClick={() => void confirmShare()} disabled={busy || !shareTarget} className="rounded-full">Share file</Button>
+             {members.length === 0 && <p className="text-xs text-destructive">No team members are available. Refresh the page and try again.</p>}
+             <Button onClick={() => void confirmShare()} disabled={Boolean(activeAction) || !shareTarget} className="rounded-full">{activeAction?.startsWith("share:") ? "Sharing…" : "Share file"}</Button>
           </div>
         </DialogContent>
       </Dialog>
