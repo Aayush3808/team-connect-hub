@@ -53,6 +53,7 @@ export const MemberDashboard = ({ files, refreshKey = 0 }: { files: { name: stri
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [newTask, setNewTask] = useState("");
   const [busy, setBusy] = useState(false);
+  const [notice, setNotice] = useState("");
 
   const load = useCallback(async () => {
     const { data: sessionData } = await supabase.auth.getSession();
@@ -104,9 +105,14 @@ export const MemberDashboard = ({ files, refreshKey = 0 }: { files: { name: stri
   const checkIn = async (status: "present" | "remote") => {
     if (!userId) return;
     setBusy(true);
-    await supabase.from("member_attendance").upsert({ user_id: userId, day: todayKey(), status }, { onConflict: "user_id,day" });
-    await supabase.from("activity_log").insert({ user_id: userId, kind: "attendance", detail: status === "present" ? "Checked in" : "Checked in (remote)" });
-    await load();
+    setNotice("");
+    const { error } = await supabase.from("member_attendance").upsert({ user_id: userId, day: todayKey(), status }, { onConflict: "user_id,day" });
+    if (error) setNotice("Attendance could not be saved. Please try again.");
+    else {
+      setNotice(status === "present" ? "Marked present for today." : "Marked as working remotely today.");
+      await supabase.from("activity_log").insert({ user_id: userId, kind: "attendance", detail: status === "present" ? "Checked in" : "Checked in (remote)" });
+      await load();
+    }
     setBusy(false);
   };
 
@@ -114,9 +120,14 @@ export const MemberDashboard = ({ files, refreshKey = 0 }: { files: { name: stri
     event.preventDefault();
     if (!userId || !newTask.trim()) return;
     setBusy(true);
-    await supabase.from("member_tasks").insert({ user_id: userId, title: newTask.trim() });
-    setNewTask("");
-    await load();
+    setNotice("");
+    const { error } = await supabase.from("member_tasks").insert({ user_id: userId, title: newTask.trim() });
+    if (error) setNotice("The task could not be added. Please try again.");
+    else {
+      setNewTask("");
+      setNotice("Task added.");
+      await load();
+    }
     setBusy(false);
   };
 
@@ -143,6 +154,7 @@ export const MemberDashboard = ({ files, refreshKey = 0 }: { files: { name: stri
 
   return (
     <div className="space-y-8">
+      {notice && <p role="status" className="rounded-xl bg-secondary px-4 py-3 text-sm text-navy">{notice}</p>}
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         {stats.map((stat) => (
           <div key={stat.label} className="rounded-2xl border border-border bg-card p-5">
@@ -156,14 +168,11 @@ export const MemberDashboard = ({ files, refreshKey = 0 }: { files: { name: stri
         <div className="rounded-2xl border border-border bg-card p-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <h2 className="flex items-center gap-2 font-medium text-navy"><CalendarCheck className="h-4 w-4 text-aqua" /> Attendance</h2>
-            {checkedInToday ? (
-              <span className="rounded-full bg-secondary px-3 py-1 text-xs text-navy">Checked in today</span>
-            ) : (
-              <div className="flex gap-2">
-                <Button size="sm" className="rounded-full" disabled={busy} onClick={() => void checkIn("present")}>Check in</Button>
-                <Button size="sm" variant="outline" className="rounded-full" disabled={busy} onClick={() => void checkIn("remote")}>Remote</Button>
-              </div>
-            )}
+            <div className="flex flex-wrap items-center gap-2">
+              {checkedInToday && <span className="text-xs text-muted-foreground">Today:</span>}
+              <Button size="sm" variant={attendanceMap.get(todayKey()) === "present" ? "default" : "outline"} className="rounded-full" disabled={busy} onClick={() => void checkIn("present")}>Present</Button>
+              <Button size="sm" variant={attendanceMap.get(todayKey()) === "remote" ? "default" : "outline"} className="rounded-full" disabled={busy} onClick={() => void checkIn("remote")}>Remote</Button>
+            </div>
           </div>
           <div className="mt-6 h-52">
             <ResponsiveContainer width="100%" height="100%">
