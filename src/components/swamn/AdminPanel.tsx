@@ -9,11 +9,25 @@ import { supabase } from "@/integrations/supabase/client";
 type Member = { user_id: string; username: string; display_name: string };
 type Announcement = { id: string; title: string; body: string; created_at: string };
 type AssignedTask = { id: string; title: string; status: string; due_date: string | null; user_id: string };
+type AttendanceRow = { user_id: string; day: string; status: string };
+
+const lastDays = (count: number) => {
+  const days: string[] = [];
+  for (let index = count - 1; index >= 0; index -= 1) {
+    const date = new Date();
+    date.setDate(date.getDate() - index);
+    days.push(
+      `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`,
+    );
+  }
+  return days;
+};
 
 export const AdminPanel = ({ onChanged }: { onChanged?: () => void }) => {
   const [members, setMembers] = useState<Member[]>([]);
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [assigned, setAssigned] = useState<AssignedTask[]>([]);
+  const [attendance, setAttendance] = useState<AttendanceRow[]>([]);
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [taskMember, setTaskMember] = useState("");
@@ -25,15 +39,18 @@ export const AdminPanel = ({ onChanged }: { onChanged?: () => void }) => {
   const [loadError, setLoadError] = useState("");
 
   const load = useCallback(async () => {
-    const [membersResult, announcementsResult, tasksResult] = await Promise.all([
+    const days = lastDays(14);
+    const [membersResult, announcementsResult, tasksResult, attendanceResult] = await Promise.all([
       supabase.from("profiles").select("user_id, username, display_name").order("display_name"),
       supabase.from("announcements").select("id, title, body, created_at").order("created_at", { ascending: false }),
       supabase.from("member_tasks").select("id, title, status, due_date, user_id").not("assigned_by", "is", null).order("created_at", { ascending: false }).limit(20),
+      supabase.from("member_attendance").select("user_id, day, status").gte("day", days[0]).order("day"),
     ]);
     setLoadError(membersResult.error ? "The team list could not be loaded. Refresh the page and try again." : "");
     setMembers((membersResult.data ?? []) as Member[]);
     setAnnouncements((announcementsResult.data ?? []) as Announcement[]);
     setAssigned((tasksResult.data ?? []) as AssignedTask[]);
+    setAttendance((attendanceResult.data ?? []) as AttendanceRow[]);
   }, []);
 
   useEffect(() => { void load(); }, [load]);
@@ -150,6 +167,49 @@ export const AdminPanel = ({ onChanged }: { onChanged?: () => void }) => {
             ))}
           </ul>
         </form>
+      </div>
+
+      <div className="mt-6 rounded-2xl border border-border bg-card p-5">
+        <h3 className="text-sm font-medium text-navy">Team attendance · last 14 days</h3>
+        <p className="mt-1 text-xs text-muted-foreground">Blue = present, light = remote, grey = no check-in.</p>
+        <div className="mt-4 overflow-x-auto">
+          <table className="w-full min-w-[520px] border-separate border-spacing-y-1.5 text-sm">
+            <thead>
+              <tr className="text-[0.65rem] text-muted-foreground">
+                <th className="text-left font-normal">Member</th>
+                {lastDays(14).map((day) => (
+                  <th key={day} className="font-normal">{Number(day.slice(8))}</th>
+                ))}
+                <th className="pl-3 text-right font-normal">Days in</th>
+              </tr>
+            </thead>
+            <tbody>
+              {members.map((member) => {
+                const rows = attendance.filter((entry) => entry.user_id === member.user_id);
+                const map = new Map(rows.map((entry) => [entry.day, entry.status]));
+                const daysIn = rows.filter((entry) => entry.status !== "absent").length;
+                return (
+                  <tr key={member.user_id}>
+                    <td className="pr-3 text-navy">{member.display_name}</td>
+                    {lastDays(14).map((day) => {
+                      const status = map.get(day);
+                      const tone = status === "present" ? "bg-primary" : status === "remote" ? "bg-secondary" : "bg-muted/50";
+                      return (
+                        <td key={day} className="px-0.5">
+                          <span title={`${day} · ${status ?? "no check-in"}`} className={`mx-auto block h-5 w-5 rounded-md ${tone}`} />
+                        </td>
+                      );
+                    })}
+                    <td className="pl-3 text-right text-muted-foreground">{daysIn}</td>
+                  </tr>
+                );
+              })}
+              {members.length === 0 && (
+                <tr><td colSpan={16} className="py-4 text-sm text-muted-foreground">No team members loaded yet.</td></tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
   );
