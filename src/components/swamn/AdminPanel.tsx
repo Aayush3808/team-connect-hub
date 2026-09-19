@@ -9,6 +9,19 @@ import { supabase } from "@/integrations/supabase/client";
 type Member = { user_id: string; username: string; display_name: string };
 type Announcement = { id: string; title: string; body: string; created_at: string };
 type AssignedTask = { id: string; title: string; status: string; due_date: string | null; user_id: string };
+type AttendanceRow = { user_id: string; day: string; status: string };
+
+const lastDays = (count: number) => {
+  const days: string[] = [];
+  for (let index = count - 1; index >= 0; index -= 1) {
+    const date = new Date();
+    date.setDate(date.getDate() - index);
+    days.push(
+      `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`,
+    );
+  }
+  return days;
+};
 
 export const AdminPanel = ({ onChanged }: { onChanged?: () => void }) => {
   const [members, setMembers] = useState<Member[]>([]);
