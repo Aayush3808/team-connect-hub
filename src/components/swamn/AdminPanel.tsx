@@ -38,15 +38,18 @@ export const AdminPanel = ({ onChanged }: { onChanged?: () => void }) => {
   const [loadError, setLoadError] = useState("");
 
   const load = useCallback(async () => {
-    const [membersResult, announcementsResult, tasksResult] = await Promise.all([
+    const days = lastDays(14);
+    const [membersResult, announcementsResult, tasksResult, attendanceResult] = await Promise.all([
       supabase.from("profiles").select("user_id, username, display_name").order("display_name"),
       supabase.from("announcements").select("id, title, body, created_at").order("created_at", { ascending: false }),
       supabase.from("member_tasks").select("id, title, status, due_date, user_id").not("assigned_by", "is", null).order("created_at", { ascending: false }).limit(20),
+      supabase.from("member_attendance").select("user_id, day, status").gte("day", days[0]).order("day"),
     ]);
     setLoadError(membersResult.error ? "The team list could not be loaded. Refresh the page and try again." : "");
     setMembers((membersResult.data ?? []) as Member[]);
     setAnnouncements((announcementsResult.data ?? []) as Announcement[]);
     setAssigned((tasksResult.data ?? []) as AssignedTask[]);
+    setAttendance((attendanceResult.data ?? []) as AttendanceRow[]);
   }, []);
 
   useEffect(() => { void load(); }, [load]);
