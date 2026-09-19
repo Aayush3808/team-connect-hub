@@ -27,6 +27,7 @@ export const AdminPanel = ({ onChanged }: { onChanged?: () => void }) => {
   const [members, setMembers] = useState<Member[]>([]);
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [assigned, setAssigned] = useState<AssignedTask[]>([]);
+  const [attendance, setAttendance] = useState<AttendanceRow[]>([]);
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [taskMember, setTaskMember] = useState("");
