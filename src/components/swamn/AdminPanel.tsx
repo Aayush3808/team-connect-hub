@@ -168,6 +168,49 @@ export const AdminPanel = ({ onChanged }: { onChanged?: () => void }) => {
           </ul>
         </form>
       </div>
+
+      <div className="mt-6 rounded-2xl border border-border bg-card p-5">
+        <h3 className="text-sm font-medium text-navy">Team attendance · last 14 days</h3>
+        <p className="mt-1 text-xs text-muted-foreground">Blue = present, light = remote, grey = no check-in.</p>
+        <div className="mt-4 overflow-x-auto">
+          <table className="w-full min-w-[520px] border-separate border-spacing-y-1.5 text-sm">
+            <thead>
+              <tr className="text-[0.65rem] text-muted-foreground">
+                <th className="text-left font-normal">Member</th>
+                {lastDays(14).map((day) => (
+                  <th key={day} className="font-normal">{Number(day.slice(8))}</th>
+                ))}
+                <th className="pl-3 text-right font-normal">Days in</th>
+              </tr>
+            </thead>
+            <tbody>
+              {members.map((member) => {
+                const rows = attendance.filter((entry) => entry.user_id === member.user_id);
+                const map = new Map(rows.map((entry) => [entry.day, entry.status]));
+                const daysIn = rows.filter((entry) => entry.status !== "absent").length;
+                return (
+                  <tr key={member.user_id}>
+                    <td className="pr-3 text-navy">{member.display_name}</td>
+                    {lastDays(14).map((day) => {
+                      const status = map.get(day);
+                      const tone = status === "present" ? "bg-primary" : status === "remote" ? "bg-secondary" : "bg-muted/50";
+                      return (
+                        <td key={day} className="px-0.5">
+                          <span title={`${day} · ${status ?? "no check-in"}`} className={`mx-auto block h-5 w-5 rounded-md ${tone}`} />
+                        </td>
+                      );
+                    })}
+                    <td className="pl-3 text-right text-muted-foreground">{daysIn}</td>
+                  </tr>
+                );
+              })}
+              {members.length === 0 && (
+                <tr><td colSpan={16} className="py-4 text-sm text-muted-foreground">No team members loaded yet.</td></tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </section>
   );
 };
